@@ -6,7 +6,9 @@
     "license": "MIT",
     "scripts": {
         "css:watch": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --watch",
-        "css:build": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --minify"
+        "css:build": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --minify",
+        "js:watch": "node esbuild.js watch",
+        "js:build": "node esbuild.js build"
     },
     "devDependencies": {
         "esbuild": "^0.13.13",

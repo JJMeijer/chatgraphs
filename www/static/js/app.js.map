@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/ts/app.ts"],
+  "sourcesContent": ["const test = () => console.log('hi');\r\n\r\ntest();\r\n"],
+  "mappings": ";;AAAA,MAAM,OAAO,MAAM,QAAQ,IAAI;AAE/B;",
+  "names": []
+}
