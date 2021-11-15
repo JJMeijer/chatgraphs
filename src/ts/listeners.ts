@@ -4,9 +4,11 @@ const setAddTabListener = () => {
     const addTabElement = document.getElementById('add-tab') as HTMLDivElement;
     const tabs = document.getElementById('tabs') as HTMLDivElement;
 
+    let tabCount = 1;
+
     addTabElement.addEventListener('click', () => {
-        const tabNumber = document.querySelectorAll('[id^=tab-]').length + 1;
-        const newTab = createNewTab(tabNumber);
+        ++tabCount;
+        const newTab = createNewTab(tabCount);
 
         tabs.insertBefore(newTab, addTabElement);
     });
@@ -19,8 +21,13 @@ const setTabClickListener = () => {
         const target = event.target as HTMLElement;
         const { id } = target;
 
-        if (id.match('^tab-[0-9]+')) {
+        if (id.match('^tab-input-[0-9]+')) {
             target.setAttribute('checked', 'checked');
+        }
+
+        if (id.match('^tab-close-[0-9]+')) {
+            const closestLabel = target.closest('label') as HTMLLabelElement;
+            closestLabel.remove();
         }
     });
 };

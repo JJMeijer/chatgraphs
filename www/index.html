@@ -10,11 +10,11 @@
 
     <body class="bg-gray-800 text-gray-100 min-h-screen">
         <div id="tabs" class="flex flex-row items-center w-full border-b border-gray-700 h-10">
-            <label class="w-32 flex" for="tab-1">
+            <label class="group w-36 flex" for="tab-input-1">
                 <input
                     type="radio"
                     name="tabs"
-                    id="tab-1"
+                    id="tab-input-1"
                     class="peer hidden"
                     checked
                 />
@@ -34,6 +34,7 @@
                     "
                 >
                     Tab 1
+                    <span id="tab-close-1" class="float-right text-gray-400 cursor-pointer text-base text-transparent group-hover:text-gray-400">X</span>
                 </span>
             </label>
             <div
