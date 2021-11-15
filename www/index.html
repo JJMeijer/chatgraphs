@@ -5,16 +5,54 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="static/css/main-dist.css" />
+        <script src="static/js/app.js"></script>
     </head>
+
     <body class="bg-gray-800 text-gray-100 min-h-screen">
-        <div id="tabs" class="flex flex-row items-center w-full border-b border-gray-700">
+        <div id="tabs" class="flex flex-row items-center w-full border-b border-gray-700 h-10">
+            <label class="w-32 flex" for="tab-1">
+                <input
+                    type="radio"
+                    name="tabs"
+                    id="tab-1"
+                    class="peer hidden"
+                    checked
+                />
+                <span
+                    tabindex="0"
+                    class="
+                        w-full
+                        p-2
+                        text-center
+                        border-gray-700
+                        border-r
+                        border-l
+                        cursor-pointer
+                        peer-checked:bg-gray-700
+                        peer-checked:cursor-default
+                        hover:bg-gray-600
+                    "
+                >
+                    Tab 1
+                </span>
+            </label>
             <div
-                id="tab-1"
-                class="p-2 text-center w-24 border-gray-700 border-r border-l cursor-pointer"
+                id="add-tab"
+                class="
+                    ml-2
+                    flex
+                    items-center
+                    justify-center
+                    h-8
+                    w-8
+                    rounded-full
+                    cursor-pointer
+                    hover:bg-gray-700
+                "
             >
-                Tab 1
+                <span class="text-xl font-bold absolute top-[4px]">+</span>
             </div>
-            <div id="add-tab" class="p-2">+</div>
         </div>
+        <div id="content-1"></div>
     </body>
 </html>

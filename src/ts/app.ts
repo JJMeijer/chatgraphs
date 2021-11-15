@@ -1,3 +1,9 @@
-const test = () => console.log('hi');
+import { setListeners } from './listeners';
 
-test();
+if (document.readyState !== 'loading') {
+    setListeners();
+} else {
+    document.addEventListener('DOMContentLoaded', () => {
+        setListeners();
+    });
+}
