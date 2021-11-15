@@ -12,7 +12,7 @@ const setAddTabListener = () => {
     });
 };
 
-const setClickTabListeners = () => {
+const setTabClickListener = () => {
     const tabs = document.getElementById('tabs') as HTMLDivElement;
 
     tabs.addEventListener('click', (event) => {
@@ -27,5 +27,5 @@ const setClickTabListeners = () => {
 
 export const setListeners = () => {
     setAddTabListener();
-    setClickTabListeners();
+    setTabClickListener();
 };
