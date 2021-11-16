@@ -41,7 +41,6 @@ const createTabElement = (): HTMLLabelElement => {
         'text-base',
         'text-transparent',
         'group-hover:text-gray-400',
-        'hover:text-gray-200',
     );
     tabClose.innerHTML = 'X';
 
@@ -82,6 +81,13 @@ export class Tab {
     }
 
     delete(): void {
+        // Focus previousSibling before deleting
+        const sibling = this.element.previousElementSibling;
+
+        if (sibling instanceof HTMLLabelElement) {
+            sibling.click();
+        }
+
         this.element.remove();
     }
 
