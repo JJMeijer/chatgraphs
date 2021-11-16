@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
     <head>
         <title>Stream Stories</title>
         <meta charset="UTF-8" />
@@ -8,52 +8,27 @@
         <script src="static/js/app.js"></script>
     </head>
 
-    <body class="bg-gray-800 text-gray-100 min-h-screen">
-        <div id="tabs" class="flex flex-row items-center w-full border-b border-gray-700 h-10">
-            <label class="group w-36 flex" for="tab-input-1">
-                <input
-                    type="radio"
-                    name="tabs"
-                    id="tab-input-1"
-                    class="peer hidden"
-                    checked
-                />
-                <span
-                    tabindex="0"
+    <body class="bg-gray-800 text-gray-400 h-full w-full">
+        <div class="flex flex-col h-full">
+            <div id="tabs" class="flex flex-row items-center w-full border-b border-gray-700 h-10">
+                <div
+                    id="add-tab"
                     class="
-                        w-full
-                        p-2
-                        text-center
-                        border-gray-700
-                        border-r
-                        border-l
+                        ml-2
+                        flex
+                        items-center
+                        justify-center
+                        h-8
+                        w-8
+                        rounded-full
                         cursor-pointer
-                        peer-checked:bg-gray-700
-                        peer-checked:cursor-default
-                        hover:bg-gray-600
+                        hover:bg-gray-700
                     "
                 >
-                    Tab 1
-                    <span id="tab-close-1" class="float-right text-gray-400 cursor-pointer text-base text-transparent group-hover:text-gray-400">X</span>
-                </span>
-            </label>
-            <div
-                id="add-tab"
-                class="
-                    ml-2
-                    flex
-                    items-center
-                    justify-center
-                    h-8
-                    w-8
-                    rounded-full
-                    cursor-pointer
-                    hover:bg-gray-700
-                "
-            >
-                <span class="text-xl font-bold absolute top-[4px]">+</span>
+                    <span class="text-xl font-bold absolute top-[4px]">+</span>
+                </div>
             </div>
+            <div id="content" class="flex-grow"></div>
         </div>
-        <div id="content-1"></div>
     </body>
 </html>
