@@ -1,3 +1,6 @@
+import { CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK } from '../constants';
+import { EventBus } from './EventBus';
+
 const createTabElement = (): HTMLLabelElement => {
     const radioId = Math.random().toString(36).substring(2, 8);
 
@@ -41,6 +44,7 @@ const createTabElement = (): HTMLLabelElement => {
         'text-base',
         'text-transparent',
         'group-hover:text-gray-400',
+        'hover:!text-gray-100',
     );
     tabClose.innerHTML = 'X';
 
@@ -55,29 +59,58 @@ const createTabElement = (): HTMLLabelElement => {
 
 export class Tab {
     element: HTMLLabelElement;
+    eventBus: EventBus;
 
-    constructor() {
+    constructor(eventBus: EventBus) {
+        this.eventBus = eventBus;
         this.element = createTabElement();
+
+        this.setListeners();
+        this.setSubscribers();
+    }
+
+    setListeners(): void {
+        const closeElement = this.element.querySelector('.close-button') as HTMLSpanElement;
+        closeElement.addEventListener('click', () => {
+            this.eventBus.publish({
+                eventName: CLOSE_APP,
+            });
+        });
+
+        const radioElement = this.element.querySelector('input[type="radio"]') as HTMLInputElement;
+        const tabClickCallback = () => {
+            this.eventBus.publish({
+                eventName: TAB_CLICK,
+            });
+        };
+
+        radioElement.addEventListener('click', tabClickCallback);
+        radioElement.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                tabClickCallback();
+            }
+        });
+    }
+
+    setSubscribers(): void {
+        this.eventBus.subscribe({
+            eventName: CLOSE_APP,
+            eventCallback: () => {
+                this.delete();
+            },
+        });
+
+        this.eventBus.subscribe({
+            eventName: CHANNEL_SUBMIT,
+            eventCallback: ({ channel }) => {
+                this.setTabTitle(channel);
+            },
+        });
     }
 
     setTabTitle(newTitle: string): void {
         const titleElement = this.element.querySelector('.title') as HTMLSpanElement;
         titleElement.innerHTML = newTitle;
-    }
-
-    onClose(callback: () => void): void {
-        const closeElement = this.element.querySelector('.close-button') as HTMLSpanElement;
-        closeElement.addEventListener('click', callback);
-    }
-
-    onClick(callback: () => void): void {
-        const radioElement = this.element.querySelector('input[type="radio"]') as HTMLInputElement;
-        radioElement.addEventListener('click', callback);
-        radioElement.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.key === 'Enter') {
-                callback();
-            }
-        });
     }
 
     delete(): void {

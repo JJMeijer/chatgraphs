@@ -1,13 +1,13 @@
-import { Story } from './Story';
+import { App } from './App';
 
 const init = () => {
-    const story = new Story();
-    story.render();
+    const app = new App();
+    app.render();
 
     const addTabElement = document.getElementById('add-tab') as HTMLDivElement;
 
     addTabElement.addEventListener('click', () => {
-        const story = new Story();
+        const story = new App();
         story.render();
     });
 };

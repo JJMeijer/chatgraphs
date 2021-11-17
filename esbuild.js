@@ -4,8 +4,8 @@ const PROD = command === 'build';
 const WATCH = command === 'watch';
 
 require('esbuild').build({
-    entryPoints: ['src/ts/app.ts'],
-    outfile: 'www/static/js/app.js',
+    entryPoints: ['src/ts/index.ts'],
+    outfile: 'www/static/js/main.js',
     minify: PROD,
     bundle: true,
     platform: 'browser',
