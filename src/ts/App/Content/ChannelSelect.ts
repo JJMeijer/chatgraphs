@@ -1,6 +1,5 @@
 import { CHANNEL_SUBMIT } from '../../constants';
 import { EventBus } from '../EventBus';
-import { IrcClient } from './Irc';
 
 const createChannelSelectElement = (): HTMLDivElement => {
     const container = document.createElement('div');
@@ -69,8 +68,6 @@ export class ChannelSelect {
 
     setListeners(): void {
         const submitCallback = (channel: string) => {
-            new IrcClient(this.eventBus, channel);
-
             this.element.classList.add('opacity-0');
 
             this.eventBus.publish({
