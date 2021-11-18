@@ -1,7 +1,24 @@
 import { CHANNEL_SUBMIT } from '../../constants';
 import { EventBus } from '../EventBus';
+import { IrcClient } from './Irc';
 
 const createChannelSelectElement = (): HTMLDivElement => {
+    const container = document.createElement('div');
+    container.classList.add(
+        'absolute',
+        'border-b',
+        'border-gray-700',
+        'h-full',
+        'w-full',
+        'flex',
+        'flex-col',
+        'justify-center',
+        'items-center',
+        'bg-gray-800',
+        'transition-opacity',
+        'duration-500',
+    );
+
     const inputWrapper = document.createElement('div');
     inputWrapper.classList.add('mb-[5%]', 'border-b', 'border-gray-700');
 
@@ -35,7 +52,8 @@ const createChannelSelectElement = (): HTMLDivElement => {
     inputWrapper.appendChild(input);
     inputWrapper.appendChild(submitButton);
 
-    return inputWrapper;
+    container.appendChild(inputWrapper);
+    return container;
 };
 
 export class ChannelSelect {
@@ -51,6 +69,10 @@ export class ChannelSelect {
 
     setListeners(): void {
         const submitCallback = (channel: string) => {
+            new IrcClient(this.eventBus, channel);
+
+            this.element.classList.add('opacity-0');
+
             this.eventBus.publish({
                 eventName: CHANNEL_SUBMIT,
                 eventData: {

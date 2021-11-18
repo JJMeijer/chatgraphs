@@ -4,6 +4,7 @@ import { EventBus } from '../EventBus';
 const createContentWrapperElement = (): HTMLDivElement => {
     const contentWrapper = document.createElement('div');
     contentWrapper.classList.add(
+        'relative',
         'content-wrapper',
         'flex',
         'flex-col',
@@ -22,6 +23,8 @@ export class Wrapper {
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
         this.element = createContentWrapperElement();
+
+        this.setSubscribers();
     }
 
     static hideAll() {
