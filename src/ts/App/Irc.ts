@@ -1,5 +1,5 @@
 import { ParsedMessage } from '../types';
-import { CHANNEL_SUBMIT, CLOSE_APP } from '../constants';
+import { CHANNEL_SUBMIT, CLOSE_APP, PARSED_MESSAGE } from '../constants';
 import { EventBus } from './EventBus';
 
 export class IrcClient {
@@ -49,25 +49,29 @@ export class IrcClient {
         messages.forEach((message: string) => {
             if (message.indexOf('PING') === 0) {
                 this.socket.send(message.replace('PING', 'PONG'));
+                return;
             }
 
             if (message.split(' ')[1] === '376') {
                 this.ready = true;
             }
 
-            this.parse(message);
+            const parsedMessage = this.parse(message);
+
+            this.eventBus.publish({
+                eventName: PARSED_MESSAGE,
+                eventData: parsedMessage,
+            });
         });
     }
 
-    parse(message: string): void {
+    parse(message: string): ParsedMessage {
         let pos = 0;
 
         const parsedMessage: ParsedMessage = {
             tags: {},
-            fullSource: '',
             source: '',
             keyword: '',
-            keywordMetadata: [],
             content: '',
         };
 
@@ -100,7 +104,7 @@ export class IrcClient {
             const nextColon = message.indexOf(':', pos + 1);
             const hasContent = nextColon !== -1;
             const metadataString = message.slice(pos + 1, hasContent ? nextColon : undefined);
-            const [fullSource, keyword, ...keywordMetadata] = metadataString.trim().split(' ');
+            const [fullSource, keyword] = metadataString.trim().split(' ');
             const content = hasContent ? message.slice(nextColon + 1) : '';
 
             if (fullSource == undefined || keyword === undefined) {
@@ -112,13 +116,11 @@ export class IrcClient {
                     ? fullSource.slice(0, fullSource.indexOf('!'))
                     : fullSource;
 
-            parsedMessage.fullSource = fullSource;
             parsedMessage.source = source;
             parsedMessage.content = content;
             parsedMessage.keyword = keyword;
-            parsedMessage.keywordMetadata = keywordMetadata;
         }
 
-        console.log(parsedMessage);
+        return parsedMessage;
     }
 }

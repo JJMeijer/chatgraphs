@@ -27,6 +27,7 @@ const createChannelSelectElement = (): HTMLDivElement => {
     input.placeholder = 'Channel...';
     input.spellcheck = false;
     input.classList.add(
+        'h-12',
         'placeholder-gray-500',
         'caret-gray-500',
         'bg-gray-800',
@@ -69,6 +70,10 @@ export class ChannelSelect {
     setListeners(): void {
         const submitCallback = (channel: string) => {
             this.element.classList.add('opacity-0');
+
+            setTimeout(() => {
+                this.element.classList.replace('flex', 'hidden');
+            }, 500);
 
             this.eventBus.publish({
                 eventName: CHANNEL_SUBMIT,

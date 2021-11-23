@@ -1,16 +1,14 @@
 import { PARSED_MESSAGE, CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK } from './constants';
 
 interface IrcTags {
-    'tmi-sent-ts'?: number;
-    [key: string]: string | number | undefined;
+    'tmi-sent-ts'?: string;
+    [key: string]: string | undefined;
 }
 
 export interface ParsedMessage {
     tags: IrcTags;
-    fullSource: string;
     source: string;
     keyword: string;
-    keywordMetadata: string[];
     content: string;
 }
 
