@@ -24,7 +24,11 @@
         // "rootDir": "./",
         // "moduleResolution": "node",
         // "baseUrl": "./",
-        // "paths": {},
+        "paths": {
+            "common/EventBus": ["./src/ts/App/EventBus"],
+            "common/types": ["./src/ts/types"],
+            "common/constants": ["./src/ts/constants"],
+        },
         // "rootDirs": [],
         // "typeRoots": [],
         // "types": [],

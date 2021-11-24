@@ -1,44 +1,36 @@
-import { PARSED_MESSAGE } from '../../../constants';
-import { ParsedMessage } from '../../../types';
-import { EventBus } from '../../EventBus';
+import { EventBus } from 'common/EventBus';
+import { PARSED_MESSAGE } from 'common/constants';
+import { ParsedMessage } from 'common/types';
 
-const createChatWrapperElement = () => {
-    const chatWrapperElement = document.createElement('div');
-    chatWrapperElement.classList.add(
-        'chat-wrapper',
+import { Message } from './Message';
+import { ChatAnchor } from './ChatAnchor';
+
+const createMessagesWrapper = (): HTMLDivElement => {
+    const messagesWrapper = document.createElement('div');
+    messagesWrapper.classList.add(
+        'chat-messages',
         'flex',
         'flex-col-reverse',
         'h-full',
-        'max-h-[95vh]',
-        'w-1/4',
-        'border-r',
-        'border-gray-700',
+        'w-full',
         'overflow-y-auto',
+        'py-1',
     );
-    return chatWrapperElement;
+
+    return messagesWrapper;
 };
 
-const createMessageElement = (time: string, color: string, userName: string, content: string) => {
-    const messageWrapper = document.createElement('div');
-    messageWrapper.classList.add('inline', 'w-full', 'px-1');
-
-    messageWrapper.innerHTML = `
-        <span class="text-gray-500 mr-1">${time}</span>
-        <span class="mr-1" style="color: ${color};">${userName}</span>
-        <span>${content}</span>
-    `;
-
-    return messageWrapper;
-};
-
-export class Chat {
+export class Messages {
     eventBus: EventBus;
     element: HTMLDivElement;
+    anchor: ChatAnchor;
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
-        this.element = createChatWrapperElement();
+        this.element = createMessagesWrapper();
+        this.anchor = new ChatAnchor();
 
+        this.render();
         this.setSubscribers();
     }
 
@@ -52,9 +44,9 @@ export class Chat {
         const userNameColor = color ? color : '#60A5FA';
         const userName = (displayName || source) + ':';
 
-        const messageElement = createMessageElement(time, userNameColor, userName, content);
+        const message = new Message(time, userNameColor, userName, content);
 
-        this.element.prepend(messageElement);
+        this.element.insertBefore(message.element, this.anchor.element.nextSibling);
     }
 
     setSubscribers(): void {
@@ -68,5 +60,9 @@ export class Chat {
                 }
             },
         });
+    }
+
+    render(): void {
+        this.element.appendChild(this.anchor.element);
     }
 }
