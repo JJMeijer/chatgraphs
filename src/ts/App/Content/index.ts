@@ -26,6 +26,6 @@ export class Content {
         this.wrapper.element.appendChild(this.channelSelect.element);
         contentContainer.appendChild(this.wrapper.element);
 
-        this.channelSelect.element.focus();
+        this.channelSelect.focus();
     }
 }

@@ -1,4 +1,13 @@
-import { PRIVMSG, ROOMSTATE, CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK, SCROLL_TO_BOTTOM, UNKNOWN } from './constants';
+import {
+    PRIVMSG,
+    ROOMSTATE,
+    USERNOTICE,
+    CHANNEL_SUBMIT,
+    CLOSE_APP,
+    TAB_CLICK,
+    SCROLL_TO_BOTTOM,
+    UNKNOWN,
+} from './constants';
 
 export interface IrcTags {
     'tmi-sent-ts'?: string;
@@ -19,6 +28,10 @@ export interface RoomstateMessage extends BaseMessage {
     keyword: typeof ROOMSTATE;
 }
 
+export interface UsernoticeMessage extends BaseMessage {
+    keyword: typeof USERNOTICE;
+}
+
 export interface SystemMessage extends BaseMessage {
     keyword: '001' | '002' | '003' | '004' | '353' | '366' | '372' | '375' | '376' | 'CAP' | 'JOIN';
 }
@@ -28,7 +41,7 @@ export interface UnknownMessage extends BaseMessage {
     keywordHint: string;
 }
 
-export type ParsedMessage = PrivMsgMessage | RoomstateMessage | SystemMessage | UnknownMessage;
+export type ParsedMessage = PrivMsgMessage | RoomstateMessage | UsernoticeMessage | SystemMessage | UnknownMessage;
 
 interface ChannelSubmit {
     channel: string;
@@ -61,6 +74,11 @@ interface RoomstateMessageSubscribeAction {
     eventCallback: SubscriberEventCallback<RoomstateMessage>;
 }
 
+interface UsernoticeMessageSubscribeAction {
+    eventName: typeof USERNOTICE;
+    eventCallback: SubscriberEventCallback<UsernoticeMessage>;
+}
+
 interface ScrollToBottomSubscribeAction {
     eventName: typeof SCROLL_TO_BOTTOM;
     eventCallback: SubscriberEventCallback<void>;
@@ -89,6 +107,11 @@ interface RoomstateMessagePublishAction {
     eventData: RoomstateMessage;
 }
 
+interface UsernoticeMessagePublishAction {
+    eventName: typeof USERNOTICE;
+    eventData: UsernoticeMessage;
+}
+
 interface ScrollToBottomPublishAction {
     eventName: typeof SCROLL_TO_BOTTOM;
 }
@@ -99,6 +122,7 @@ export type SubscribeAction =
     | ChannelSubmitSubscribeAction
     | PrivMsgMessageSubscribeAction
     | RoomstateMessageSubscribeAction
+    | UsernoticeMessageSubscribeAction
     | ScrollToBottomSubscribeAction;
 
 export type PublishAction =
@@ -107,6 +131,7 @@ export type PublishAction =
     | ChannelSubmitPublishAction
     | PrivMsgMessagePublishAction
     | RoomstateMessagePublishAction
+    | UsernoticeMessagePublishAction
     | ScrollToBottomPublishAction;
 
 export interface SubscriberDictionary {
@@ -115,6 +140,7 @@ export interface SubscriberDictionary {
     [CHANNEL_SUBMIT]: SubscriberEventCallback<ChannelSubmit>[];
     [PRIVMSG]: SubscriberEventCallback<PrivMsgMessage>[];
     [ROOMSTATE]: SubscriberEventCallback<RoomstateMessage>[];
+    [USERNOTICE]: SubscriberEventCallback<UsernoticeMessage>[];
     [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
 }
 

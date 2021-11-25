@@ -99,4 +99,9 @@ export class ChannelSelect {
             }
         });
     }
+
+    focus(): void {
+        const inputElement = this.element.querySelector('input') as HTMLInputElement;
+        inputElement.focus();
+    }
 }

@@ -1,5 +1,5 @@
 import { IrcTags, ParsedMessage } from '../types';
-import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG, ROOMSTATE, UNKNOWN } from '../constants';
+import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG, ROOMSTATE, UNKNOWN, USERNOTICE } from '../constants';
 import { EventBus } from './EventBus';
 
 export class IrcClient {
@@ -27,7 +27,7 @@ export class IrcClient {
                     this.socket.send('CAP REQ :twitch.tv/membership');
                     this.socket.send('CAP REQ :twitch.tv/tags');
                     this.socket.send('CAP REQ :twitch.tv/commands');
-                    this.socket.send(`JOIN #${channel}`);
+                    this.socket.send(`JOIN #${channel.toLowerCase()}`);
                     return;
                 }
 
@@ -71,6 +71,13 @@ export class IrcClient {
                 case ROOMSTATE:
                     this.eventBus.publish({
                         eventName: ROOMSTATE,
+                        eventData: parsedMessage,
+                    });
+                    break;
+
+                case USERNOTICE:
+                    this.eventBus.publish({
+                        eventName: USERNOTICE,
                         eventData: parsedMessage,
                     });
                     break;
@@ -135,6 +142,14 @@ export class IrcClient {
                     };
 
                 case ROOMSTATE:
+                    return {
+                        keyword,
+                        source,
+                        content,
+                        tags,
+                    };
+
+                case USERNOTICE:
                     return {
                         keyword,
                         source,

@@ -30,9 +30,9 @@ export class Message {
         const messageContent = this.emoteFactory.emotify(content, emotes);
 
         messageWrapper.innerHTML = `
-        <span class="text-gray-500 mr-1">${time}</span>
+        <span class="text-gray-500 mr-1 text-sm">${time}</span>
         <span class="mr-1 font-bold" style="color: ${userNameColor};">${userName}</span>
-        <span>${messageContent}</span>`;
+        <span class="text-gray-300 break-words">${messageContent}</span>`;
 
         return messageWrapper;
     }
