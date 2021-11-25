@@ -2,14 +2,7 @@ import { EventBus } from '../../../EventBus';
 
 const createChartsElement = () => {
     const chartsElement = document.createElement('div');
-    chartsElement.classList.add(
-        'flex',
-        'flex-col',
-        'h-full',
-        'justify-center',
-        'items-center',
-        'w-3/4',
-    );
+    chartsElement.classList.add('flex', 'flex-col', 'h-full', 'justify-center', 'items-center', 'w-3/4');
 
     chartsElement.innerHTML = 'CHARTS';
     return chartsElement;

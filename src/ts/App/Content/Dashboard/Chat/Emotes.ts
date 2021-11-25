@@ -54,9 +54,7 @@ export class EmoteFactory {
 
                     const word = chars.slice(start, end + 1).join('');
 
-                    chars[
-                        start
-                    ] = `<img class="inline" src="${emoteUrl}" alt="${word}" title="${word}" />`;
+                    chars[start] = `<img class="inline" src="${emoteUrl}" alt="${word}" title="${word}" />`;
 
                     for (let i = start + 1; i < end + 1; i++) {
                         chars[i] = '';
@@ -73,17 +71,17 @@ export class EmoteFactory {
             const ffId = this.frankerFacezEmotes[word];
 
             if (bttvId) {
-                return `<img class="inline" src="${getBttvEmoteUrl(
-                    bttvId,
-                )}" alt="${word}" title="${word}" />`;
+                return `<img class="inline" src="${getBttvEmoteUrl(bttvId)}" alt="${word}" title="${word}" />`;
             }
 
             if (ffId) {
-                return `<img class="inline" src="${getFrankerFaceZEmoteUrl(
-                    ffId,
-                )}" alt="${word}" title="${word}" />`;
+                return `<img class="inline" src="${getFrankerFaceZEmoteUrl(ffId)}" alt="${word}" title="${word}" />`;
             }
 
+            /**
+             * Make a link for URLs. not really the right place to do this
+             * but we're looping over words anyway
+             */
             const URL_REGEX = /^(https?:\/\/[^\s]+)$/g;
             if (word.match(URL_REGEX)) {
                 return `<a class="hover:bg-gray-600 text-purple-500 cursor-pointer rounded-md px-1" target="_blank" href="${word}">${word}</a>`;

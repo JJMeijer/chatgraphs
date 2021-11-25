@@ -1,12 +1,4 @@
-import {
-    PRIVMSG,
-    ROOMSTATE,
-    CHANNEL_SUBMIT,
-    CLOSE_APP,
-    TAB_CLICK,
-    SCROLL_TO_BOTTOM,
-    UNKNOWN,
-} from './constants';
+import { PRIVMSG, ROOMSTATE, CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK, SCROLL_TO_BOTTOM, UNKNOWN } from './constants';
 
 export interface IrcTags {
     'tmi-sent-ts'?: string;

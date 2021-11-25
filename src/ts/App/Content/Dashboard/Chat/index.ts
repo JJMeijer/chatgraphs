@@ -5,14 +5,7 @@ import { ScrollBack } from './ScrollBack';
 
 const createChatWrapperElement = () => {
     const chatWrapperElement = document.createElement('div');
-    chatWrapperElement.classList.add(
-        'relative',
-        'max-h-[95vh]',
-        'h-full',
-        'w-1/4',
-        'border-r',
-        'border-gray-700',
-    );
+    chatWrapperElement.classList.add('relative', 'max-h-[95vh]', 'h-full', 'w-1/4', 'border-r', 'border-gray-700');
 
     return chatWrapperElement;
 };

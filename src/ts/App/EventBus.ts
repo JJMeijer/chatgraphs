@@ -1,11 +1,4 @@
-import {
-    CHANNEL_SUBMIT,
-    CLOSE_APP,
-    ROOMSTATE,
-    TAB_CLICK,
-    SCROLL_TO_BOTTOM,
-    PRIVMSG,
-} from '../constants';
+import { CHANNEL_SUBMIT, CLOSE_APP, ROOMSTATE, TAB_CLICK, SCROLL_TO_BOTTOM, PRIVMSG } from '../constants';
 import { SubscribeAction, SubscriberDictionary, PublishAction } from '../types';
 
 export class EventBus {
@@ -64,21 +57,15 @@ export class EventBus {
                 break;
 
             case CHANNEL_SUBMIT:
-                this.subscriberDictionary[CHANNEL_SUBMIT].forEach((callback) =>
-                    callback(action.eventData),
-                );
+                this.subscriberDictionary[CHANNEL_SUBMIT].forEach((callback) => callback(action.eventData));
                 break;
 
             case PRIVMSG:
-                this.subscriberDictionary[PRIVMSG].forEach((callback) =>
-                    callback(action.eventData),
-                );
+                this.subscriberDictionary[PRIVMSG].forEach((callback) => callback(action.eventData));
                 break;
 
             case ROOMSTATE:
-                this.subscriberDictionary[ROOMSTATE].forEach((callback) =>
-                    callback(action.eventData),
-                );
+                this.subscriberDictionary[ROOMSTATE].forEach((callback) => callback(action.eventData));
                 break;
 
             case SCROLL_TO_BOTTOM:

@@ -121,10 +121,7 @@ export class IrcClient {
                 throw new Error('Unexpected format of IRC Message Tags');
             }
 
-            const source =
-                fullSource.indexOf('!') !== -1
-                    ? fullSource.slice(0, fullSource.indexOf('!'))
-                    : fullSource;
+            const source = fullSource.indexOf('!') !== -1 ? fullSource.slice(0, fullSource.indexOf('!')) : fullSource;
 
             const content = hasContent ? contentCleaner(message.slice(nextColon + 1)) : '';
 
