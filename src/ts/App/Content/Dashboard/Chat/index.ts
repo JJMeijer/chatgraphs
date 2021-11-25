@@ -29,7 +29,7 @@ export class Chat {
         this.element = createChatWrapperElement();
 
         this.messages = new Messages(this.eventBus);
-        this.scrollBack = new ScrollBack();
+        this.scrollBack = new ScrollBack(this.eventBus);
 
         this.setListeners();
         this.render();

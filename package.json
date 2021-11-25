@@ -8,7 +8,8 @@
         "css:watch": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --watch",
         "css:build": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --minify",
         "js:watch": "node esbuild.js watch",
-        "js:build": "node esbuild.js build"
+        "js:build": "node esbuild.js build",
+        "js:lint": "eslint src -c .eslintrc && tsc --noEmit"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.3.1",

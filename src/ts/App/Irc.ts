@@ -1,5 +1,5 @@
-import { ParsedMessage } from '../types';
-import { CHANNEL_SUBMIT, CLOSE_APP, PARSED_MESSAGE } from '../constants';
+import { IrcTags, ParsedMessage } from '../types';
+import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG, ROOMSTATE, UNKNOWN } from '../constants';
 import { EventBus } from './EventBus';
 
 export class IrcClient {
@@ -58,22 +58,33 @@ export class IrcClient {
 
             const parsedMessage = this.parse(message);
 
-            this.eventBus.publish({
-                eventName: PARSED_MESSAGE,
-                eventData: parsedMessage,
-            });
+            const { keyword } = parsedMessage;
+
+            switch (keyword) {
+                case PRIVMSG:
+                    this.eventBus.publish({
+                        eventName: PRIVMSG,
+                        eventData: parsedMessage,
+                    });
+                    break;
+
+                case ROOMSTATE:
+                    this.eventBus.publish({
+                        eventName: ROOMSTATE,
+                        eventData: parsedMessage,
+                    });
+                    break;
+
+                case UNKNOWN:
+                    console.log(parsedMessage);
+            }
         });
     }
 
     parse(message: string): ParsedMessage {
         let pos = 0;
 
-        const parsedMessage: ParsedMessage = {
-            tags: {},
-            source: '',
-            keyword: '',
-            content: '',
-        };
+        const tags: IrcTags = {};
 
         // Process irc tags
         if (message[pos] === '@') {
@@ -88,7 +99,7 @@ export class IrcClient {
                     throw new Error('Unexpected format of IRC Message Tags');
                 }
 
-                parsedMessage.tags[tagsPair[0]] = tagsPair[1];
+                tags[tagsPair[0]] = tagsPair[1];
             });
 
             pos = nextSpace + 1;
@@ -105,7 +116,6 @@ export class IrcClient {
             const hasContent = nextColon !== -1;
             const metadataString = message.slice(pos + 1, hasContent ? nextColon : undefined);
             const [fullSource, keyword] = metadataString.trim().split(' ');
-            const content = hasContent ? message.slice(nextColon + 1) : '';
 
             if (fullSource == undefined || keyword === undefined) {
                 throw new Error('Unexpected format of IRC Message Tags');
@@ -116,11 +126,57 @@ export class IrcClient {
                     ? fullSource.slice(0, fullSource.indexOf('!'))
                     : fullSource;
 
-            parsedMessage.source = source;
-            parsedMessage.content = content;
-            parsedMessage.keyword = keyword;
-        }
+            const content = hasContent ? contentCleaner(message.slice(nextColon + 1)) : '';
 
-        return parsedMessage;
+            switch (keyword) {
+                case PRIVMSG:
+                    return {
+                        keyword,
+                        source,
+                        content,
+                        tags,
+                    };
+
+                case ROOMSTATE:
+                    return {
+                        keyword,
+                        source,
+                        content,
+                        tags,
+                    };
+
+                case '001':
+                case '002':
+                case '003':
+                case '004':
+                case '353':
+                case '366':
+                case '372':
+                case '375':
+                case '376':
+                case 'CAP':
+                case 'JOIN':
+                    return {
+                        keyword,
+                        source,
+                        content,
+                        tags,
+                    };
+
+                default:
+                    return {
+                        keyword: UNKNOWN,
+                        keywordHint: keyword,
+                        source,
+                        content,
+                        tags,
+                    };
+            }
+        }
+        throw new Error('Unexpected format of IRC Message');
     }
 }
+
+const contentCleaner = (message: string): string => {
+    return message.replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
+};

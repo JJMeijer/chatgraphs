@@ -1,4 +1,11 @@
-import { CHANNEL_SUBMIT, CLOSE_APP, PARSED_MESSAGE, TAB_CLICK } from '../constants';
+import {
+    CHANNEL_SUBMIT,
+    CLOSE_APP,
+    ROOMSTATE,
+    TAB_CLICK,
+    SCROLL_TO_BOTTOM,
+    PRIVMSG,
+} from '../constants';
 import { SubscribeAction, SubscriberDictionary, PublishAction } from '../types';
 
 export class EventBus {
@@ -9,7 +16,9 @@ export class EventBus {
             [CLOSE_APP]: [],
             [TAB_CLICK]: [],
             [CHANNEL_SUBMIT]: [],
-            [PARSED_MESSAGE]: [],
+            [PRIVMSG]: [],
+            [ROOMSTATE]: [],
+            [SCROLL_TO_BOTTOM]: [],
         };
     }
 
@@ -27,8 +36,16 @@ export class EventBus {
                 this.subscriberDictionary[CHANNEL_SUBMIT].push(action.eventCallback);
                 break;
 
-            case PARSED_MESSAGE:
-                this.subscriberDictionary[PARSED_MESSAGE].push(action.eventCallback);
+            case PRIVMSG:
+                this.subscriberDictionary[PRIVMSG].push(action.eventCallback);
+                break;
+
+            case ROOMSTATE:
+                this.subscriberDictionary[ROOMSTATE].push(action.eventCallback);
+                break;
+
+            case SCROLL_TO_BOTTOM:
+                this.subscriberDictionary[SCROLL_TO_BOTTOM].push(action.eventCallback);
                 break;
 
             default:
@@ -52,10 +69,20 @@ export class EventBus {
                 );
                 break;
 
-            case PARSED_MESSAGE:
-                this.subscriberDictionary[PARSED_MESSAGE].forEach((callback) =>
+            case PRIVMSG:
+                this.subscriberDictionary[PRIVMSG].forEach((callback) =>
                     callback(action.eventData),
                 );
+                break;
+
+            case ROOMSTATE:
+                this.subscriberDictionary[ROOMSTATE].forEach((callback) =>
+                    callback(action.eventData),
+                );
+                break;
+
+            case SCROLL_TO_BOTTOM:
+                this.subscriberDictionary[SCROLL_TO_BOTTOM].forEach((callback) => callback());
                 break;
 
             default:

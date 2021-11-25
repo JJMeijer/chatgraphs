@@ -1,16 +1,42 @@
-import { PARSED_MESSAGE, CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK } from './constants';
+import {
+    PRIVMSG,
+    ROOMSTATE,
+    CHANNEL_SUBMIT,
+    CLOSE_APP,
+    TAB_CLICK,
+    SCROLL_TO_BOTTOM,
+    UNKNOWN,
+} from './constants';
 
-interface IrcTags {
+export interface IrcTags {
     'tmi-sent-ts'?: string;
     [key: string]: string | undefined;
 }
 
-export interface ParsedMessage {
+interface BaseMessage {
     tags: IrcTags;
     source: string;
-    keyword: string;
     content: string;
 }
+
+export interface PrivMsgMessage extends BaseMessage {
+    keyword: typeof PRIVMSG;
+}
+
+export interface RoomstateMessage extends BaseMessage {
+    keyword: typeof ROOMSTATE;
+}
+
+export interface SystemMessage extends BaseMessage {
+    keyword: '001' | '002' | '003' | '004' | '353' | '366' | '372' | '375' | '376' | 'CAP' | 'JOIN';
+}
+
+export interface UnknownMessage extends BaseMessage {
+    keyword: typeof UNKNOWN;
+    keywordHint: string;
+}
+
+export type ParsedMessage = PrivMsgMessage | RoomstateMessage | SystemMessage | UnknownMessage;
 
 interface ChannelSubmit {
     channel: string;
@@ -33,9 +59,19 @@ interface ChannelSubmitSubscribeAction {
     eventCallback: SubscriberEventCallback<ChannelSubmit>;
 }
 
-interface ParsedMessageSubscribeAction {
-    eventName: typeof PARSED_MESSAGE;
-    eventCallback: SubscriberEventCallback<ParsedMessage>;
+interface PrivMsgMessageSubscribeAction {
+    eventName: typeof PRIVMSG;
+    eventCallback: SubscriberEventCallback<PrivMsgMessage>;
+}
+
+interface RoomstateMessageSubscribeAction {
+    eventName: typeof ROOMSTATE;
+    eventCallback: SubscriberEventCallback<RoomstateMessage>;
+}
+
+interface ScrollToBottomSubscribeAction {
+    eventName: typeof SCROLL_TO_BOTTOM;
+    eventCallback: SubscriberEventCallback<void>;
 }
 
 interface CloseAppPublishAction {
@@ -51,26 +87,69 @@ interface ChannelSubmitPublishAction {
     eventData: ChannelSubmit;
 }
 
-interface ParsedMessagePublishAction {
-    eventName: typeof PARSED_MESSAGE;
-    eventData: ParsedMessage;
+interface PrivMsgMessagePublishAction {
+    eventName: typeof PRIVMSG;
+    eventData: PrivMsgMessage;
+}
+
+interface RoomstateMessagePublishAction {
+    eventName: typeof ROOMSTATE;
+    eventData: RoomstateMessage;
+}
+
+interface ScrollToBottomPublishAction {
+    eventName: typeof SCROLL_TO_BOTTOM;
 }
 
 export type SubscribeAction =
     | CloseAppSubscribeAction
     | TabClickSubscribeAction
     | ChannelSubmitSubscribeAction
-    | ParsedMessageSubscribeAction;
+    | PrivMsgMessageSubscribeAction
+    | RoomstateMessageSubscribeAction
+    | ScrollToBottomSubscribeAction;
 
 export type PublishAction =
     | CloseAppPublishAction
     | TabClickPublishAction
     | ChannelSubmitPublishAction
-    | ParsedMessagePublishAction;
+    | PrivMsgMessagePublishAction
+    | RoomstateMessagePublishAction
+    | ScrollToBottomPublishAction;
 
 export interface SubscriberDictionary {
     [CLOSE_APP]: SubscriberEventCallback<void>[];
     [TAB_CLICK]: SubscriberEventCallback<void>[];
     [CHANNEL_SUBMIT]: SubscriberEventCallback<ChannelSubmit>[];
-    [PARSED_MESSAGE]: SubscriberEventCallback<ParsedMessage>[];
+    [PRIVMSG]: SubscriberEventCallback<PrivMsgMessage>[];
+    [ROOMSTATE]: SubscriberEventCallback<RoomstateMessage>[];
+    [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
+}
+
+export interface BttvEmoteInfo {
+    id: string;
+    code: string;
+}
+
+export interface BttvResponse {
+    channelEmotes: BttvEmoteInfo[];
+    sharedEmotes: BttvEmoteInfo[];
+}
+
+export interface EmoteInfo {
+    [key: string]: string;
+}
+
+export interface FrankerFacezResponse {
+    room: {
+        set: number;
+    };
+    sets: {
+        [key: string]: {
+            emoticons: {
+                id: string;
+                name: string;
+            }[];
+        };
+    };
 }

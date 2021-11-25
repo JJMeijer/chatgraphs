@@ -1,3 +1,6 @@
+import { SCROLL_TO_BOTTOM } from 'common/constants';
+import { EventBus } from 'common/EventBus';
+
 const createScrollBackElement = (): HTMLDivElement => {
     const scrollBackWrapper = document.createElement('div');
     scrollBackWrapper.classList.add(
@@ -20,7 +23,7 @@ const createScrollBackElement = (): HTMLDivElement => {
         'text-center',
         'border',
         'border-gray-600',
-        'bg-gray-500',
+        'bg-gray-900',
         'font-gray-100',
         'font-bold',
         'cursor-pointer',
@@ -33,11 +36,15 @@ const createScrollBackElement = (): HTMLDivElement => {
 };
 
 export class ScrollBack {
+    eventBus: EventBus;
     element: HTMLDivElement;
     isVisible = false;
 
-    constructor() {
+    constructor(eventBus: EventBus) {
+        this.eventBus = eventBus;
         this.element = createScrollBackElement();
+
+        this.setListeners();
     }
 
     toggleVisibility(): void {
@@ -48,5 +55,15 @@ export class ScrollBack {
         }
 
         this.isVisible = !this.isVisible;
+    }
+
+    setListeners(): void {
+        this.element.addEventListener('click', () => {
+            this.toggleVisibility();
+
+            this.eventBus.publish({
+                eventName: SCROLL_TO_BOTTOM,
+            });
+        });
     }
 }

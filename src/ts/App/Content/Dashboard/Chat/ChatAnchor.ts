@@ -1,3 +1,6 @@
+import { SCROLL_TO_BOTTOM } from 'common/constants';
+import { EventBus } from 'common/EventBus';
+
 const createChatAnchorElement = (): HTMLSpanElement => {
     const chatAnchorElement = document.createElement('span');
     chatAnchorElement.classList.add('chat-anchor');
@@ -6,10 +9,14 @@ const createChatAnchorElement = (): HTMLSpanElement => {
 };
 
 export class ChatAnchor {
+    eventBus: EventBus;
     element: HTMLSpanElement;
 
-    constructor() {
+    constructor(eventBus: EventBus) {
+        this.eventBus = eventBus;
         this.element = createChatAnchorElement();
+
+        this.setSubscribers();
     }
 
     isVisible(): boolean {
@@ -23,5 +30,14 @@ export class ChatAnchor {
         const { bottom: parentBottom } = parent.getBoundingClientRect();
 
         return anchorTop < parentBottom;
+    }
+
+    setSubscribers(): void {
+        this.eventBus.subscribe({
+            eventName: SCROLL_TO_BOTTOM,
+            eventCallback: () => {
+                this.element.scrollIntoView();
+            },
+        });
     }
 }
