@@ -1,11 +1,11 @@
 import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
-import { CLOSE_APP, PRIVMSG } from 'common/constants';
-import { EventBus } from 'common/EventBus';
+import { PRIVMSG, CLOSE_APP } from 'common/constants';
 
+import { EventBus } from 'common/EventBus';
 import { BaseChart } from './BaseChart';
 import { getSecondRoundedToFive } from './helpers';
 
-export class MessagesPerSecond extends BaseChart {
+export class SubscribersPercentage extends BaseChart {
     data: ScatterDataPoint[] = [];
     config: ChartConfiguration = {
         type: 'line',
@@ -13,6 +13,7 @@ export class MessagesPerSecond extends BaseChart {
             datasets: [
                 {
                     data: this.data,
+                    fill: true,
                 },
             ],
         },
@@ -23,7 +24,6 @@ export class MessagesPerSecond extends BaseChart {
                     type: 'time',
                     time: {
                         unit: 'second',
-                        stepSize: 5,
                         tooltipFormat: 'H:mm:ss',
                         displayFormats: {
                             second: 'H:mm:ss',
@@ -31,16 +31,33 @@ export class MessagesPerSecond extends BaseChart {
                     },
                 },
                 y: {
-                    type: 'linear',
                     min: 0,
-                    beginAtZero: true,
+                    max: 1,
+                    ticks: {
+                        stepSize: 0.2,
+                        callback: (value) => {
+                            return (value as number) * 100 + '%';
+                        },
+                    },
                 },
             },
             plugins: {
                 title: {
                     display: true,
-                    text: 'Avg. Messages per Second',
+                    text: '% Messages from Subscribers',
                     position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (tooltipItem) => {
+                            const {
+                                parsed: { y },
+                            } = tooltipItem;
+
+                            const perc = ((y as number) * 100).toFixed(1) + '%';
+                            return perc;
+                        },
+                    },
                 },
             },
         },
@@ -49,6 +66,7 @@ export class MessagesPerSecond extends BaseChart {
     chart = new Chart(this.canvas, this.config);
 
     newMessages = 0;
+    subscriberMessages = 0;
 
     constructor(eventBus: EventBus) {
         super(eventBus);
@@ -57,16 +75,24 @@ export class MessagesPerSecond extends BaseChart {
         this.setupLoop();
     }
 
-    setSubscribers(): void {
+    setSubscribers() {
         this.eventBus.subscribe({
             eventName: PRIVMSG,
-            eventCallback: () => {
+            eventCallback: (privMsgMessage) => {
                 this.newMessages++;
+
+                const {
+                    tags: { subscriber },
+                } = privMsgMessage;
+
+                if (subscriber === '1') {
+                    this.subscriberMessages++;
+                }
             },
         });
     }
 
-    setupLoop(): void {
+    setupLoop() {
         const loop = setInterval(() => {
             const currentSecond = getSecondRoundedToFive();
 
@@ -82,10 +108,11 @@ export class MessagesPerSecond extends BaseChart {
             if (this.newMessages > 0) {
                 this.data.push({
                     x: currentSecond,
-                    y: this.newMessages / 5,
+                    y: this.subscriberMessages / this.newMessages,
                 });
 
                 this.newMessages = 0;
+                this.subscriberMessages = 0;
             }
 
             if (this.data.length > 60) {

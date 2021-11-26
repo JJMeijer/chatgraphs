@@ -9,6 +9,7 @@ import {
     BarElement,
     Title,
     Tooltip,
+    Filler,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 Chart.register(
@@ -21,6 +22,7 @@ Chart.register(
     BarElement,
     Title,
     Tooltip,
+    Filler,
 );
 
 Chart.defaults.color = '#9CA3AF';

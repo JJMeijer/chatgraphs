@@ -3,14 +3,10 @@ import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
 import { PRIVMSG } from 'common/constants';
 import { EventBus } from 'common/EventBus';
 
-import { getChartElement } from './chartElement';
+import { BaseChart } from './BaseChart';
 import { getCurrentMinute } from './helpers';
 
-export class MessagesPerMinute {
-    eventBus: EventBus;
-    element = getChartElement();
-    canvas = this.element.querySelector('canvas') as HTMLCanvasElement;
-
+export class MessagesPerMinute extends BaseChart {
     data: ScatterDataPoint[] = [];
     config: ChartConfiguration = {
         type: 'bar',
@@ -28,8 +24,9 @@ export class MessagesPerMinute {
                     type: 'time',
                     time: {
                         unit: 'minute',
+                        tooltipFormat: 'H:mm',
                         displayFormats: {
-                            minute: 'HH:mm',
+                            minute: 'H:mm',
                         },
                     },
                 },
@@ -37,7 +34,7 @@ export class MessagesPerMinute {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Messages per minute',
+                    text: 'Messages per Minute',
                     position: 'top',
                 },
             },
@@ -47,7 +44,7 @@ export class MessagesPerMinute {
     chart = new Chart(this.canvas, this.config);
 
     constructor(eventBus: EventBus) {
-        this.eventBus = eventBus;
+        super(eventBus);
 
         this.setSubscribers();
     }
@@ -57,6 +54,16 @@ export class MessagesPerMinute {
             eventName: PRIVMSG,
             eventCallback: () => {
                 const currentMinute = getCurrentMinute();
+
+                if (this.data.length === 0) {
+                    for (let i = 0; i < 30; i++) {
+                        this.data.push({
+                            x: currentMinute - (30 - i) * 60000,
+                            y: 0,
+                        });
+                    }
+                }
+
                 const index = this.data.findIndex((point) => point.x === currentMinute);
 
                 if (index === -1) {
@@ -66,6 +73,10 @@ export class MessagesPerMinute {
                     });
                 } else {
                     (this.data[index] as ScatterDataPoint).y += 1;
+                }
+
+                if (this.data.length > 30) {
+                    this.data.shift();
                 }
 
                 this.chart.update();
