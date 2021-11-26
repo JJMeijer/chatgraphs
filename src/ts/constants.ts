@@ -6,3 +6,4 @@ export const ROOMSTATE = 'ROOMSTATE';
 export const USERNOTICE = 'USERNOTICE';
 export const SCROLL_TO_BOTTOM = 'scrollToBottom';
 export const UNKNOWN = 'unknown';
+export const MESSAGES_PER_MINUTE = 'messagesPerMinute';

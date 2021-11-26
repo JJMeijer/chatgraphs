@@ -1,26 +1,16 @@
 import { EventBus } from 'common/EventBus';
 import { PRIVMSG, USERNOTICE } from 'common/constants';
 import { PrivMsgMessage, UsernoticeMessage } from 'common/types';
+import { createElementFromHtml } from 'common/element';
 
 import { Message } from './Message';
 import { ChatAnchor } from './ChatAnchor';
 import { EmoteFactory } from './Emotes';
 import { SystemMessage } from './SystemMessage';
 
-const createMessagesWrapper = (): HTMLDivElement => {
-    const messagesWrapper = document.createElement('div');
-    messagesWrapper.classList.add(
-        'chat-messages',
-        'flex',
-        'flex-col-reverse',
-        'h-full',
-        'w-full',
-        'overflow-y-auto',
-        'py-1',
-    );
-
-    return messagesWrapper;
-};
+const html = /*html*/ `
+    <div class="chat-messages flex flex-col-reverse h-full w-full overflow-y-auto py-1"></div>
+`;
 
 export class Messages {
     eventBus: EventBus;
@@ -30,7 +20,7 @@ export class Messages {
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
-        this.element = createMessagesWrapper();
+        this.element = createElementFromHtml<HTMLDivElement>(html);
         this.anchor = new ChatAnchor(this.eventBus);
         this.emoteFactory = new EmoteFactory(this.eventBus);
 

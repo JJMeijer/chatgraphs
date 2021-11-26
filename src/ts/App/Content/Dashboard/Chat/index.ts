@@ -1,14 +1,12 @@
 import { EventBus } from 'common/EventBus';
+import { createElementFromHtml } from 'common/element';
 
 import { Messages } from './Messages';
 import { ScrollBack } from './ScrollBack';
 
-const createChatWrapperElement = () => {
-    const chatWrapperElement = document.createElement('div');
-    chatWrapperElement.classList.add('relative', 'max-h-[95vh]', 'h-full', 'w-1/4', 'border-r', 'border-gray-700');
-
-    return chatWrapperElement;
-};
+const html = /*html*/ `
+    <div class="relative max-h-[95vh] h-full w-1/4 border-r border-gray-700"></div>
+`;
 
 export class Chat {
     eventBus: EventBus;
@@ -19,7 +17,7 @@ export class Chat {
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
-        this.element = createChatWrapperElement();
+        this.element = createElementFromHtml<HTMLDivElement>(html);
 
         this.messages = new Messages(this.eventBus);
         this.scrollBack = new ScrollBack(this.eventBus);

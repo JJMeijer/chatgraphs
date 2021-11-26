@@ -1,20 +1,10 @@
 import { CLOSE_APP, TAB_CLICK } from '../../constants';
 import { EventBus } from '../EventBus';
+import { createElementFromHtml } from 'common/element';
 
-const createContentWrapperElement = (): HTMLDivElement => {
-    const contentWrapper = document.createElement('div');
-    contentWrapper.classList.add(
-        'relative',
-        'content-wrapper',
-        'flex',
-        'flex-col',
-        'justify-center',
-        'items-center',
-        'h-full',
-    );
-
-    return contentWrapper;
-};
+const html = /*html*/ `
+    <div class="relative content-wrapper flex flex-col justify-center items-center h-full"></div>
+`;
 
 export class Wrapper {
     eventBus: EventBus;
@@ -22,7 +12,7 @@ export class Wrapper {
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
-        this.element = createContentWrapperElement();
+        this.element = createElementFromHtml<HTMLDivElement>(html);
 
         this.setSubscribers();
     }

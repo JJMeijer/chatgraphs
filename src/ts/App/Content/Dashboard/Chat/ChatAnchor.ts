@@ -1,12 +1,10 @@
 import { SCROLL_TO_BOTTOM } from 'common/constants';
 import { EventBus } from 'common/EventBus';
+import { createElementFromHtml } from 'common/element';
 
-const createChatAnchorElement = (): HTMLSpanElement => {
-    const chatAnchorElement = document.createElement('span');
-    chatAnchorElement.classList.add('chat-anchor');
-
-    return chatAnchorElement;
-};
+const html = /*html*/ `
+    <span class="chat-anchor"></span>
+`;
 
 export class ChatAnchor {
     eventBus: EventBus;
@@ -14,7 +12,7 @@ export class ChatAnchor {
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
-        this.element = createChatAnchorElement();
+        this.element = createElementFromHtml<HTMLSpanElement>(html);
 
         this.setSubscribers();
     }

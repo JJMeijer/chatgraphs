@@ -1,60 +1,43 @@
+import { createElementFromHtml } from 'common/element';
 import { CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK } from '../constants';
 import { EventBus } from './EventBus';
 
 const createTabElement = (): HTMLLabelElement => {
     const radioId = Math.random().toString(36).substring(2, 8);
 
-    const tab = document.createElement('label');
-    tab.classList.add('group', 'w-36', 'flex');
-    tab.htmlFor = radioId;
+    const html = /*html*/ `
+        <label class="group w-36 flex" for="${radioId}">
+            <input type="radio" name="tabs" id="${radioId}" class="peer hidden" checked>
+            <div tabindex="0" class="
+                w-full
+                p-2
+                text-center
+                border-gray-700
+                border-r
+                border-l
+                cursor-pointer
+                peer-checked:bg-gray-700
+                peer-checked:cursor-default
+                hover:bg-gray-600
+            ">
+                <span class="title">New Tab</span>
+                <span tabindex="0" class="
+                    close-button
+                    float-right
+                    text-gray-400
+                    cursor-pointer
+                    text-base
+                    text-transparent
+                    group-hover:text-gray-400
+                    hover:!text-gray-100
+                ">
+                    X
+                </span>
+            </div>
+        </label>
+    `;
 
-    const radio = document.createElement('input');
-    radio.type = 'radio';
-    radio.name = 'tabs';
-    radio.id = radioId;
-    radio.classList.add('peer', 'hidden');
-    radio.checked = true;
-
-    const tabContent = document.createElement('div');
-    tabContent.tabIndex = 0;
-    tabContent.classList.add(
-        'w-full',
-        'p-2',
-        'text-center',
-        'border-gray-700',
-        'border-r',
-        'border-l',
-        'cursor-pointer',
-        'peer-checked:bg-gray-700',
-        'peer-checked:cursor-default',
-        'hover:bg-gray-600',
-    );
-
-    const tabTitle = document.createElement('span');
-    tabTitle.classList.add('title');
-    tabTitle.innerHTML = 'New Tab';
-
-    const tabClose = document.createElement('span');
-    tabClose.tabIndex = 0;
-    tabClose.classList.add(
-        'close-button',
-        'float-right',
-        'text-gray-400',
-        'cursor-pointer',
-        'text-base',
-        'text-transparent',
-        'group-hover:text-gray-400',
-        'hover:!text-gray-100',
-    );
-    tabClose.innerHTML = 'X';
-
-    tabContent.appendChild(tabTitle);
-    tabContent.appendChild(tabClose);
-
-    tab.appendChild(radio);
-    tab.appendChild(tabContent);
-
-    return tab;
+    return createElementFromHtml<HTMLLabelElement>(html);
 };
 
 export class Tab {

@@ -25,6 +25,7 @@
         // "moduleResolution": "node",
         // "baseUrl": "./",
         "paths": {
+            "common/element": ["./src/ts/element"],
             "common/EventBus": ["./src/ts/App/EventBus"],
             "common/types": ["./src/ts/types"],
             "common/constants": ["./src/ts/constants"],

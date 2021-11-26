@@ -1,5 +1,18 @@
+import { createElementFromHtml } from 'common/element';
 import { PrivMsgMessage } from 'common/types';
 import { EmoteFactory } from './Emotes';
+
+const createMessageElement = (time: string, color: string, username: string, content: string) => {
+    const html = /*html*/ `
+        <div class="message inline w-full px-1">
+            <span class="text-gray-500 mr-1 text-sm">${time}</span>
+            <span class="mr-1 font-bold" style="color: ${color};">${username}</span>
+            <span class="text-gray-300 breakw-words">${content}</span>
+        </div>
+    `;
+
+    return createElementFromHtml<HTMLDivElement>(html);
+};
 
 export class Message {
     emoteFactory: EmoteFactory;
@@ -15,9 +28,6 @@ export class Message {
     }
 
     createMessage(): HTMLDivElement {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.classList.add('message', 'inline', 'w-full', 'px-1');
-
         const { tags, source, content } = this.privMsgMessage;
         const { 'display-name': displayName, 'tmi-sent-ts': timestamp, color, emotes } = tags;
 
@@ -29,11 +39,6 @@ export class Message {
 
         const messageContent = this.emoteFactory.emotify(content, emotes);
 
-        messageWrapper.innerHTML = `
-        <span class="text-gray-500 mr-1 text-sm">${time}</span>
-        <span class="mr-1 font-bold" style="color: ${userNameColor};">${userName}</span>
-        <span class="text-gray-300 break-words">${messageContent}</span>`;
-
-        return messageWrapper;
+        return createMessageElement(time, userNameColor, userName, messageContent);
     }
 }
