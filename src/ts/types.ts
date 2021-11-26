@@ -7,6 +7,7 @@ import {
     TAB_CLICK,
     SCROLL_TO_BOTTOM,
     UNKNOWN,
+    CLEARCHAT,
 } from './constants';
 
 export interface IrcTags {
@@ -32,6 +33,10 @@ export interface UsernoticeMessage extends BaseMessage {
     keyword: typeof USERNOTICE;
 }
 
+export interface ClearchatMessage extends BaseMessage {
+    keyword: typeof CLEARCHAT;
+}
+
 export interface SystemMessage extends BaseMessage {
     keyword: '001' | '002' | '003' | '004' | '353' | '366' | '372' | '375' | '376' | 'CAP' | 'JOIN';
 }
@@ -41,7 +46,13 @@ export interface UnknownMessage extends BaseMessage {
     keywordHint: string;
 }
 
-export type ParsedMessage = PrivMsgMessage | RoomstateMessage | UsernoticeMessage | SystemMessage | UnknownMessage;
+export type ParsedMessage =
+    | PrivMsgMessage
+    | RoomstateMessage
+    | UsernoticeMessage
+    | ClearchatMessage
+    | SystemMessage
+    | UnknownMessage;
 
 interface ChannelSubmit {
     channel: string;
@@ -79,6 +90,11 @@ interface UsernoticeMessageSubscribeAction {
     eventCallback: SubscriberEventCallback<UsernoticeMessage>;
 }
 
+interface ClearchatMessageSubscribeAction {
+    eventName: typeof CLEARCHAT;
+    eventCallback: SubscriberEventCallback<ClearchatMessage>;
+}
+
 interface ScrollToBottomSubscribeAction {
     eventName: typeof SCROLL_TO_BOTTOM;
     eventCallback: SubscriberEventCallback<void>;
@@ -112,6 +128,11 @@ interface UsernoticeMessagePublishAction {
     eventData: UsernoticeMessage;
 }
 
+interface ClearchatMessagePublishAction {
+    eventName: typeof CLEARCHAT;
+    eventData: ClearchatMessage;
+}
+
 interface ScrollToBottomPublishAction {
     eventName: typeof SCROLL_TO_BOTTOM;
 }
@@ -123,6 +144,7 @@ export type SubscribeAction =
     | PrivMsgMessageSubscribeAction
     | RoomstateMessageSubscribeAction
     | UsernoticeMessageSubscribeAction
+    | ClearchatMessageSubscribeAction
     | ScrollToBottomSubscribeAction;
 
 export type PublishAction =
@@ -132,6 +154,7 @@ export type PublishAction =
     | PrivMsgMessagePublishAction
     | RoomstateMessagePublishAction
     | UsernoticeMessagePublishAction
+    | ClearchatMessagePublishAction
     | ScrollToBottomPublishAction;
 
 export interface SubscriberDictionary {
@@ -141,6 +164,7 @@ export interface SubscriberDictionary {
     [PRIVMSG]: SubscriberEventCallback<PrivMsgMessage>[];
     [ROOMSTATE]: SubscriberEventCallback<RoomstateMessage>[];
     [USERNOTICE]: SubscriberEventCallback<UsernoticeMessage>[];
+    [CLEARCHAT]: SubscriberEventCallback<ClearchatMessage>[];
     [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
 }
 
@@ -170,4 +194,9 @@ export interface FrankerFacezResponse {
             }[];
         };
     };
+}
+
+export interface TimeData {
+    x: number;
+    y: number;
 }

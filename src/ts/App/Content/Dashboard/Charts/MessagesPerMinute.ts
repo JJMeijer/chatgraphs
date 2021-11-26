@@ -1,34 +1,75 @@
-import { Chart, ChartConfiguration } from 'chart.js';
+import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
 
-import { MESSAGES_PER_MINUTE } from 'common/constants';
+import { PRIVMSG } from 'common/constants';
 import { EventBus } from 'common/EventBus';
-import { createElementFromHtml } from 'common/element';
 
-const html = /*html*/ `
-    <div class="flex items-center justify-center w-1/3 h-1/3 border border-purple-400">
-        <canvas id="${MESSAGES_PER_MINUTE}"></canvas>
-    </div>
-`;
+import { getChartElement } from './chartElement';
+import { getCurrentMinute } from './helpers';
 
 export class MessagesPerMinute {
     eventBus: EventBus;
-    element: HTMLDivElement;
-    canvas: HTMLCanvasElement;
+    element = getChartElement();
+    canvas = this.element.querySelector('canvas') as HTMLCanvasElement;
 
-    chart: Chart;
+    data: ScatterDataPoint[] = [];
+    config: ChartConfiguration = {
+        type: 'bar',
+        data: {
+            datasets: [
+                {
+                    data: this.data,
+                },
+            ],
+        },
+        options: {
+            parsing: false,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'minute',
+                        displayFormats: {
+                            minute: 'HH:mm',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Messages per minute',
+                    position: 'top',
+                },
+            },
+        },
+    };
+
+    chart = new Chart(this.canvas, this.config);
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
-        this.element = createElementFromHtml<HTMLDivElement>(html);
-        this.canvas = this.element.querySelector(`#${MESSAGES_PER_MINUTE}`) as HTMLCanvasElement;
 
-        this.chart = new Chart(this.canvas, CONFIG);
+        this.setSubscribers();
+    }
+
+    setSubscribers(): void {
+        this.eventBus.subscribe({
+            eventName: PRIVMSG,
+            eventCallback: () => {
+                const currentMinute = getCurrentMinute();
+                const index = this.data.findIndex((point) => point.x === currentMinute);
+
+                if (index === -1) {
+                    this.data.push({
+                        x: currentMinute,
+                        y: 1,
+                    });
+                } else {
+                    (this.data[index] as ScatterDataPoint).y += 1;
+                }
+
+                this.chart.update();
+            },
+        });
     }
 }
-
-const CONFIG: ChartConfiguration = {
-    type: 'bar',
-    data: {
-        datasets: [],
-    },
-};
