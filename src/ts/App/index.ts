@@ -1,7 +1,7 @@
 import { Content } from './Content';
 import { Tab } from './Tab';
 import { EventBus } from './EventBus';
-import { IrcClient } from './Irc';
+import { IrcClient } from './IrcClient';
 
 export class App {
     tab: Tab;

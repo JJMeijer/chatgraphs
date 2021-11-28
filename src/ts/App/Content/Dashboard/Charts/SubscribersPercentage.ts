@@ -24,6 +24,7 @@ export class SubscribersPercentage extends BaseChart {
                     type: 'time',
                     time: {
                         unit: 'second',
+                        stepSize: 20,
                         tooltipFormat: 'H:mm:ss',
                         displayFormats: {
                             second: 'H:mm:ss',

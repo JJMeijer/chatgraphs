@@ -23,7 +23,7 @@ export class MessagesPerSecond extends BaseChart {
                     type: 'time',
                     time: {
                         unit: 'second',
-                        stepSize: 5,
+                        stepSize: 20,
                         tooltipFormat: 'H:mm:ss',
                         displayFormats: {
                             second: 'H:mm:ss',

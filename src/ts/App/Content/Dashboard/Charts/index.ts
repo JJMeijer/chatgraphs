@@ -6,6 +6,7 @@ import './chartGlobalSetup';
 import { MessagesPerMinute } from './MessagesPerMinute';
 import { MessagesPerSecond } from './MessagesPerSecond';
 import { SubscribersPercentage } from './SubscribersPercentage';
+import { Counters } from './Counters';
 
 const html = /*html*/ `
     <div class="flex flex-row flex-wrap h-full p-2 w-3/4">
@@ -18,6 +19,7 @@ export class Charts {
     messagesPerSecond: MessagesPerSecond;
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
+    counters: Counters;
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
@@ -26,12 +28,14 @@ export class Charts {
         this.messagesPerSecond = new MessagesPerSecond(this.eventBus);
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
+        this.counters = new Counters(this.eventBus);
 
         this.render();
     }
 
     render(): void {
         this.element.append(
+            this.counters.element,
             this.messagesPerSecond.element,
             this.messagesPerMinute.element,
             this.subscribersPercentage.element,
