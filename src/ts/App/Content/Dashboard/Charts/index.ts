@@ -6,6 +6,7 @@ import './chartGlobalSetup';
 import { MessagesPerMinute } from './MessagesPerMinute';
 import { MessagesPerSecond } from './MessagesPerSecond';
 import { SubscribersPercentage } from './SubscribersPercentage';
+import { Notices } from './Notices';
 import { Counters } from './Counters';
 
 const html = /*html*/ `
@@ -19,6 +20,7 @@ export class Charts {
     messagesPerSecond: MessagesPerSecond;
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
+    notices: Notices;
     counters: Counters;
 
     constructor(eventBus: EventBus) {
@@ -28,6 +30,7 @@ export class Charts {
         this.messagesPerSecond = new MessagesPerSecond(this.eventBus);
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
+        this.notices = new Notices(this.eventBus);
         this.counters = new Counters(this.eventBus);
 
         this.render();
@@ -39,6 +42,7 @@ export class Charts {
             this.messagesPerSecond.element,
             this.messagesPerMinute.element,
             this.subscribersPercentage.element,
+            this.notices.element,
         );
     }
 }

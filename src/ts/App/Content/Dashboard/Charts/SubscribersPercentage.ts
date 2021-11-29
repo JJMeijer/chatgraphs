@@ -45,7 +45,7 @@ export class SubscribersPercentage extends BaseChart {
             plugins: {
                 title: {
                     display: true,
-                    text: '% Messages from Subscribers',
+                    text: '% Subscriber Messages',
                     position: 'top',
                 },
                 tooltip: {
@@ -59,6 +59,9 @@ export class SubscribersPercentage extends BaseChart {
                             return perc;
                         },
                     },
+                },
+                legend: {
+                    display: false,
                 },
             },
         },

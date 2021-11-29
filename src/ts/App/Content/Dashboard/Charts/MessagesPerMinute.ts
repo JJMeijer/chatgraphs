@@ -1,6 +1,6 @@
 import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
 
-import { PRIVMSG } from 'common/constants';
+import { CHANNEL_SUBMIT, PRIVMSG } from 'common/constants';
 import { EventBus } from 'common/EventBus';
 
 import { BaseChart } from './BaseChart';
@@ -37,6 +37,9 @@ export class MessagesPerMinute extends BaseChart {
                     text: 'Messages per Minute',
                     position: 'top',
                 },
+                legend: {
+                    display: false,
+                },
             },
         },
     };
@@ -51,7 +54,7 @@ export class MessagesPerMinute extends BaseChart {
 
     setSubscribers(): void {
         this.eventBus.subscribe({
-            eventName: PRIVMSG,
+            eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
                 const currentMinute = getCurrentMinute();
 
@@ -64,6 +67,14 @@ export class MessagesPerMinute extends BaseChart {
                     }
                 }
 
+                this.chart.update();
+            },
+        });
+
+        this.eventBus.subscribe({
+            eventName: PRIVMSG,
+            eventCallback: () => {
+                const currentMinute = getCurrentMinute();
                 const index = this.data.findIndex((point) => point.x === currentMinute);
 
                 if (index === -1) {

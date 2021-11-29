@@ -1,6 +1,5 @@
 import {
     CHANNEL_SUBMIT,
-    CHATTERS_UPDATE,
     CLOSE_APP,
     ROOMSTATE,
     TAB_CLICK,
@@ -19,7 +18,6 @@ export class EventBus {
             [CLOSE_APP]: [],
             [TAB_CLICK]: [],
             [CHANNEL_SUBMIT]: [],
-            [CHATTERS_UPDATE]: [],
             [PRIVMSG]: [],
             [ROOMSTATE]: [],
             [USERNOTICE]: [],
@@ -40,10 +38,6 @@ export class EventBus {
 
             case CHANNEL_SUBMIT:
                 this.subscriberDictionary[CHANNEL_SUBMIT].push(action.eventCallback);
-                break;
-
-            case CHATTERS_UPDATE:
-                this.subscriberDictionary[CHATTERS_UPDATE].push(action.eventCallback);
                 break;
 
             case PRIVMSG:
@@ -83,10 +77,6 @@ export class EventBus {
 
             case CHANNEL_SUBMIT:
                 this.subscriberDictionary[CHANNEL_SUBMIT].forEach((callback) => callback(action.eventData));
-                break;
-
-            case CHATTERS_UPDATE:
-                this.subscriberDictionary[CHATTERS_UPDATE].forEach((callback) => callback(action.eventData));
                 break;
 
             case PRIVMSG:

@@ -1,5 +1,5 @@
 import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
-import { CLOSE_APP, PRIVMSG } from 'common/constants';
+import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG } from 'common/constants';
 import { EventBus } from 'common/EventBus';
 
 import { BaseChart } from './BaseChart';
@@ -42,6 +42,9 @@ export class MessagesPerSecond extends BaseChart {
                     text: 'Avg. Messages per Second',
                     position: 'top',
                 },
+                legend: {
+                    display: false,
+                },
             },
         },
     };
@@ -59,6 +62,22 @@ export class MessagesPerSecond extends BaseChart {
 
     setSubscribers(): void {
         this.eventBus.subscribe({
+            eventName: CHANNEL_SUBMIT,
+            eventCallback: () => {
+                const currentSecond = getSecondRoundedToFive();
+
+                if (this.data.length === 0) {
+                    for (let i = 0; i < 60; i++) {
+                        this.data.push({
+                            x: currentSecond - (60 - i) * 5000,
+                            y: NaN,
+                        });
+                    }
+                }
+            },
+        });
+
+        this.eventBus.subscribe({
             eventName: PRIVMSG,
             eventCallback: () => {
                 this.newMessages++;
@@ -69,15 +88,6 @@ export class MessagesPerSecond extends BaseChart {
     setupLoop(): void {
         const loop = setInterval(() => {
             const currentSecond = getSecondRoundedToFive();
-
-            if (this.data.length === 0) {
-                for (let i = 0; i < 60; i++) {
-                    this.data.push({
-                        x: currentSecond - (60 - i) * 5000,
-                        y: NaN,
-                    });
-                }
-            }
 
             if (this.newMessages > 0) {
                 this.data.push({
