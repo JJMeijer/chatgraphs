@@ -8,6 +8,7 @@ import {
     SCROLL_TO_BOTTOM,
     UNKNOWN,
     CLEARCHAT,
+    CLEARMSG,
 } from './constants';
 
 export interface IrcTags {
@@ -37,6 +38,10 @@ export interface ClearchatMessage extends BaseMessage {
     keyword: typeof CLEARCHAT;
 }
 
+export interface ClearMsgMessage extends BaseMessage {
+    keyword: typeof CLEARMSG;
+}
+
 export interface SystemMessage extends BaseMessage {
     keyword: '001' | '002' | '003' | '004' | '353' | '366' | '372' | '375' | '376' | 'CAP' | 'JOIN';
 }
@@ -51,6 +56,7 @@ export type ParsedMessage =
     | RoomstateMessage
     | UsernoticeMessage
     | ClearchatMessage
+    | ClearMsgMessage
     | SystemMessage
     | UnknownMessage;
 
@@ -95,6 +101,11 @@ interface ClearchatMessageSubscribeAction {
     eventCallback: SubscriberEventCallback<ClearchatMessage>;
 }
 
+interface ClearMsgMessageSubscribeAction {
+    eventName: typeof CLEARMSG;
+    eventCallback: SubscriberEventCallback<ClearMsgMessage>;
+}
+
 interface ScrollToBottomSubscribeAction {
     eventName: typeof SCROLL_TO_BOTTOM;
     eventCallback: SubscriberEventCallback<void>;
@@ -133,6 +144,11 @@ interface ClearchatMessagePublishAction {
     eventData: ClearchatMessage;
 }
 
+interface ClearMsgMessagePublishAction {
+    eventName: typeof CLEARMSG;
+    eventData: ClearMsgMessage;
+}
+
 interface ScrollToBottomPublishAction {
     eventName: typeof SCROLL_TO_BOTTOM;
 }
@@ -145,6 +161,7 @@ export type SubscribeAction =
     | RoomstateMessageSubscribeAction
     | UsernoticeMessageSubscribeAction
     | ClearchatMessageSubscribeAction
+    | ClearMsgMessageSubscribeAction
     | ScrollToBottomSubscribeAction;
 
 export type PublishAction =
@@ -155,6 +172,7 @@ export type PublishAction =
     | RoomstateMessagePublishAction
     | UsernoticeMessagePublishAction
     | ClearchatMessagePublishAction
+    | ClearMsgMessagePublishAction
     | ScrollToBottomPublishAction;
 
 export interface SubscriberDictionary {
@@ -165,6 +183,7 @@ export interface SubscriberDictionary {
     [ROOMSTATE]: SubscriberEventCallback<RoomstateMessage>[];
     [USERNOTICE]: SubscriberEventCallback<UsernoticeMessage>[];
     [CLEARCHAT]: SubscriberEventCallback<ClearchatMessage>[];
+    [CLEARMSG]: SubscriberEventCallback<ClearMsgMessage>[];
     [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
 }
 

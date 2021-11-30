@@ -1,5 +1,5 @@
 import { IrcTags, ParsedMessage } from '../types';
-import { CHANNEL_SUBMIT, CLEARCHAT, CLOSE_APP, PRIVMSG, ROOMSTATE, UNKNOWN, USERNOTICE } from '../constants';
+import { CHANNEL_SUBMIT, CLEARCHAT, CLEARMSG, CLOSE_APP, PRIVMSG, ROOMSTATE, UNKNOWN, USERNOTICE } from '../constants';
 import { EventBus } from './EventBus';
 
 export class IrcClient {
@@ -89,6 +89,13 @@ export class IrcClient {
                     });
                     break;
 
+                case CLEARMSG:
+                    this.eventBus.publish({
+                        eventName: CLEARMSG,
+                        eventData: parsedMessage,
+                    });
+                    break;
+
                 case UNKNOWN:
                     console.log(parsedMessage);
             }
@@ -144,6 +151,7 @@ export class IrcClient {
                 case ROOMSTATE:
                 case USERNOTICE:
                 case CLEARCHAT:
+                case CLEARMSG:
                 case '001':
                 case '002':
                 case '003':

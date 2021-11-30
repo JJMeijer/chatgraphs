@@ -7,6 +7,7 @@ import {
     PRIVMSG,
     USERNOTICE,
     CLEARCHAT,
+    CLEARMSG,
 } from '../constants';
 import { SubscribeAction, SubscriberDictionary, PublishAction } from '../types';
 
@@ -22,6 +23,7 @@ export class EventBus {
             [ROOMSTATE]: [],
             [USERNOTICE]: [],
             [CLEARCHAT]: [],
+            [CLEARMSG]: [],
             [SCROLL_TO_BOTTOM]: [],
         };
     }
@@ -54,6 +56,10 @@ export class EventBus {
 
             case CLEARCHAT:
                 this.subscriberDictionary[CLEARCHAT].push(action.eventCallback);
+                break;
+
+            case CLEARMSG:
+                this.subscriberDictionary[CLEARMSG].push(action.eventCallback);
                 break;
 
             case SCROLL_TO_BOTTOM:
@@ -93,6 +99,10 @@ export class EventBus {
 
             case CLEARCHAT:
                 this.subscriberDictionary[CLEARCHAT].forEach((callback) => callback(action.eventData));
+                break;
+
+            case CLEARMSG:
+                this.subscriberDictionary[CLEARMSG].forEach((callback) => callback(action.eventData));
                 break;
 
             case SCROLL_TO_BOTTOM:
