@@ -8,6 +8,7 @@ import {
     USERNOTICE,
     CLEARCHAT,
     CLEARMSG,
+    VIEWER_COUNT,
 } from '../constants';
 import { SubscribeAction, SubscriberDictionary, PublishAction } from '../types';
 
@@ -25,6 +26,7 @@ export class EventBus {
             [CLEARCHAT]: [],
             [CLEARMSG]: [],
             [SCROLL_TO_BOTTOM]: [],
+            [VIEWER_COUNT]: [],
         };
     }
 
@@ -64,6 +66,10 @@ export class EventBus {
 
             case SCROLL_TO_BOTTOM:
                 this.subscriberDictionary[SCROLL_TO_BOTTOM].push(action.eventCallback);
+                break;
+
+            case VIEWER_COUNT:
+                this.subscriberDictionary[VIEWER_COUNT].push(action.eventCallback);
                 break;
 
             default:
@@ -107,6 +113,10 @@ export class EventBus {
 
             case SCROLL_TO_BOTTOM:
                 this.subscriberDictionary[SCROLL_TO_BOTTOM].forEach((callback) => callback());
+                break;
+
+            case VIEWER_COUNT:
+                this.subscriberDictionary[VIEWER_COUNT].forEach((callback) => callback(action.eventData));
                 break;
 
             default:

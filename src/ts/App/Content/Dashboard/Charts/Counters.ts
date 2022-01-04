@@ -1,4 +1,4 @@
-import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG } from 'common/constants';
+import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG, VIEWER_COUNT } from 'common/constants';
 import { createElementFromHtml } from 'common/element';
 import { EventBus } from 'common/EventBus';
 
@@ -7,6 +7,11 @@ const html = /*html*/ `
         <div class="py-1 px-4 flex flex-col">
             <span class="text-base">Dashboard Uptime: </span>
             <span class="timer text-lg font-bold">00:00:00</span>
+        </div>
+
+        <div class="py-1 px-4 flex flex-col">
+            <span class="text-base">Current Viewers: </span>
+            <span class="viewers text-lg font-bold">0</span>
         </div>
 
         <div class="py-1 px-4 flex flex-col">
@@ -27,6 +32,7 @@ export class Counters {
     totalMessagesElement = this.element.querySelector('.message-count') as HTMLSpanElement;
     distinctChattersElement = this.element.querySelector('.distinct-chatters') as HTMLSpanElement;
     timerElement = this.element.querySelector('.timer') as HTMLSpanElement;
+    viewersElement = this.element.querySelector('.viewers') as HTMLSpanElement;
 
     totalMessages = 0;
     chatters: string[] = [];
@@ -84,6 +90,13 @@ export class Counters {
                         clearInterval(interval);
                     },
                 });
+            },
+        });
+
+        this.eventBus.subscribe({
+            eventName: VIEWER_COUNT,
+            eventCallback: ({ viewers }) => {
+                this.viewersElement.innerText = viewers.toString();
             },
         });
     }

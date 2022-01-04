@@ -9,6 +9,7 @@ import {
     UNKNOWN,
     CLEARCHAT,
     CLEARMSG,
+    VIEWER_COUNT,
 } from './constants';
 
 export interface IrcTags {
@@ -64,6 +65,10 @@ interface ChannelSubmit {
     channel: string;
 }
 
+interface ViewerCount {
+    viewers: number;
+}
+
 type SubscriberEventCallback<U> = (eventData: U) => void;
 
 interface CloseAppSubscribeAction {
@@ -111,6 +116,11 @@ interface ScrollToBottomSubscribeAction {
     eventCallback: SubscriberEventCallback<void>;
 }
 
+interface ViewerCountSubscribeAction {
+    eventName: typeof VIEWER_COUNT;
+    eventCallback: SubscriberEventCallback<ViewerCount>;
+}
+
 interface CloseAppPublishAction {
     eventName: typeof CLOSE_APP;
 }
@@ -153,6 +163,11 @@ interface ScrollToBottomPublishAction {
     eventName: typeof SCROLL_TO_BOTTOM;
 }
 
+interface ViewerCountPublishAction {
+    eventName: typeof VIEWER_COUNT;
+    eventData: ViewerCount;
+}
+
 export type SubscribeAction =
     | CloseAppSubscribeAction
     | TabClickSubscribeAction
@@ -162,7 +177,8 @@ export type SubscribeAction =
     | UsernoticeMessageSubscribeAction
     | ClearchatMessageSubscribeAction
     | ClearMsgMessageSubscribeAction
-    | ScrollToBottomSubscribeAction;
+    | ScrollToBottomSubscribeAction
+    | ViewerCountSubscribeAction;
 
 export type PublishAction =
     | CloseAppPublishAction
@@ -173,7 +189,8 @@ export type PublishAction =
     | UsernoticeMessagePublishAction
     | ClearchatMessagePublishAction
     | ClearMsgMessagePublishAction
-    | ScrollToBottomPublishAction;
+    | ScrollToBottomPublishAction
+    | ViewerCountPublishAction;
 
 export interface SubscriberDictionary {
     [CLOSE_APP]: SubscriberEventCallback<void>[];
@@ -185,6 +202,7 @@ export interface SubscriberDictionary {
     [CLEARCHAT]: SubscriberEventCallback<ClearchatMessage>[];
     [CLEARMSG]: SubscriberEventCallback<ClearMsgMessage>[];
     [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
+    [VIEWER_COUNT]: SubscriberEventCallback<ViewerCount>[];
 }
 
 export interface BttvEmoteInfo {
