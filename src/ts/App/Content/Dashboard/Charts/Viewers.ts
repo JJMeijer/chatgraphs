@@ -1,11 +1,10 @@
 import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
-import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG } from 'common/constants';
+import { VIEWER_COUNT, CHANNEL_SUBMIT } from 'common/constants';
 import { EventBus } from 'common/EventBus';
-
 import { BaseChart } from './BaseChart';
-import { getSecondRoundedTo } from './helpers';
+import { getCurrentSecond, getCurrentMinute } from './helpers';
 
-export class MessagesPerSecond extends BaseChart {
+export class Viewers extends BaseChart {
     data: ScatterDataPoint[] = [];
     config: ChartConfiguration = {
         type: 'line',
@@ -22,11 +21,10 @@ export class MessagesPerSecond extends BaseChart {
                 x: {
                     type: 'time',
                     time: {
-                        unit: 'second',
-                        stepSize: 20,
+                        unit: 'minute',
                         tooltipFormat: 'H:mm:ss',
                         displayFormats: {
-                            second: 'H:mm:ss',
+                            minute: 'H:mm',
                         },
                     },
                 },
@@ -39,7 +37,7 @@ export class MessagesPerSecond extends BaseChart {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Avg. Messages per Second (Last 5 Minutes)',
+                    text: 'Viewers (Last 30 Minutes)',
                     position: 'top',
                 },
                 legend: {
@@ -51,25 +49,24 @@ export class MessagesPerSecond extends BaseChart {
 
     chart = new Chart(this.canvas, this.config);
 
-    newMessages = 0;
-
     constructor(eventBus: EventBus) {
         super(eventBus);
 
+        this.canvas.id = 'viewers';
+
         this.setSubscribers();
-        this.setupLoop();
     }
 
     setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
-                const currentSecond = getSecondRoundedTo(5);
+                const currentMinute = getCurrentMinute();
 
                 if (this.data.length === 0) {
-                    for (let i = 0; i < 60; i++) {
+                    for (let i = 0; i < 30; i++) {
                         this.data.push({
-                            x: currentSecond - (60 - i) * 5000,
+                            x: currentMinute - (30 - i) * 60000,
                             y: NaN,
                         });
                     }
@@ -80,37 +77,20 @@ export class MessagesPerSecond extends BaseChart {
         });
 
         this.eventBus.subscribe({
-            eventName: PRIVMSG,
-            eventCallback: () => {
-                this.newMessages++;
-            },
-        });
-    }
+            eventName: VIEWER_COUNT,
+            eventCallback: ({ viewers }) => {
+                const currentSecond = getCurrentSecond();
 
-    setupLoop(): void {
-        const loop = setInterval(() => {
-            const currentSecond = getSecondRoundedTo(5);
-
-            if (this.newMessages > 0) {
                 this.data.push({
                     x: currentSecond,
-                    y: this.newMessages / 5,
+                    y: viewers,
                 });
 
-                this.newMessages = 0;
-            }
+                while (this.data[0] && this.data[0].x < currentSecond - 30 * 60000) {
+                    this.data.shift();
+                }
 
-            if (this.data.length > 60) {
-                this.data.shift();
-            }
-
-            this.chart.update();
-        }, 5000);
-
-        this.eventBus.subscribe({
-            eventName: CLOSE_APP,
-            eventCallback: () => {
-                clearInterval(loop);
+                this.chart.update();
             },
         });
     }

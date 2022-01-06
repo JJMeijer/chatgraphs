@@ -6,7 +6,7 @@ const createMessageElement = (time: string, color: string, username: string, con
     const html = /*html*/ `
         <div class="message inline w-full px-1">
             <span class="text-gray-500 mr-1 text-sm">${time}</span>
-            <span class="mr-1 font-bold" style="color: ${color};">${username}</span>
+            <span class="mr-1" style="color: ${color};">${username}</span>
             <span class="text-gray-300 breakw-words">${content}</span>
         </div>
     `;

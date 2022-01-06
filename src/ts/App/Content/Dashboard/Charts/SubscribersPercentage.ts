@@ -3,7 +3,7 @@ import { PRIVMSG, CLOSE_APP } from 'common/constants';
 
 import { EventBus } from 'common/EventBus';
 import { BaseChart } from './BaseChart';
-import { getSecondRoundedToFive } from './helpers';
+import { getSecondRoundedTo } from './helpers';
 
 export class SubscribersPercentage extends BaseChart {
     data: ScatterDataPoint[] = [];
@@ -45,7 +45,7 @@ export class SubscribersPercentage extends BaseChart {
             plugins: {
                 title: {
                     display: true,
-                    text: '% Subscriber Messages',
+                    text: '% Messages from Subscribers (Last 5 Minutes)',
                     position: 'top',
                 },
                 tooltip: {
@@ -98,12 +98,12 @@ export class SubscribersPercentage extends BaseChart {
 
     setupLoop() {
         const loop = setInterval(() => {
-            const currentSecond = getSecondRoundedToFive();
+            const currentSecond = getSecondRoundedTo(10);
 
             if (this.data.length === 0) {
-                for (let i = 0; i < 60; i++) {
+                for (let i = 0; i < 30; i++) {
                     this.data.push({
-                        x: currentSecond - (60 - i) * 5000,
+                        x: currentSecond - (30 - i) * 5000,
                         y: NaN,
                     });
                 }
@@ -119,12 +119,12 @@ export class SubscribersPercentage extends BaseChart {
                 this.subscriberMessages = 0;
             }
 
-            if (this.data.length > 60) {
+            if (this.data.length > 30) {
                 this.data.shift();
             }
 
             this.chart.update();
-        }, 5000);
+        }, 10000);
 
         this.eventBus.subscribe({
             eventName: CLOSE_APP,

@@ -34,7 +34,7 @@ export class MessagesPerMinute extends BaseChart {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Messages per Minute',
+                    text: 'Messages per Minute (Last 30 Minutes)',
                     position: 'top',
                 },
                 legend: {

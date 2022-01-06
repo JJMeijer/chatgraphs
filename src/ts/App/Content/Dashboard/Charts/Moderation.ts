@@ -1,13 +1,11 @@
 import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
-import { CHANNEL_SUBMIT, CLEARCHAT, CLEARMSG, CLOSE_APP, USERNOTICE } from 'common/constants';
+import { CHANNEL_SUBMIT, CLEARCHAT, CLEARMSG, CLOSE_APP } from 'common/constants';
 
 import { EventBus } from 'common/EventBus';
 import { getCurrentMinute } from './helpers';
 import { BaseChart } from './BaseChart';
 
-export class Notices extends BaseChart {
-    subs: ScatterDataPoint[] = [];
-    giftedSubs: ScatterDataPoint[] = [];
+export class Moderation extends BaseChart {
     timeouts: ScatterDataPoint[] = [];
     bans: ScatterDataPoint[] = [];
     removed: ScatterDataPoint[] = [];
@@ -16,16 +14,6 @@ export class Notices extends BaseChart {
         type: 'bar',
         data: {
             datasets: [
-                {
-                    label: 'Subs',
-                    data: this.subs,
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                },
-                {
-                    label: 'Gifted',
-                    data: this.giftedSubs,
-                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                },
                 {
                     label: 'Timeouts',
                     data: this.timeouts,
@@ -37,7 +25,7 @@ export class Notices extends BaseChart {
                     backgroundColor: 'rgba(75, 192, 192, 0.8)',
                 },
                 {
-                    label: 'Removed',
+                    label: 'MSG Removed',
                     data: this.removed,
                     backgroundColor: 'rgba(255, 159, 64, 0.8)',
                 },
@@ -66,7 +54,7 @@ export class Notices extends BaseChart {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Notices',
+                    text: 'Moderation (Last 30 Minutes)',
                     position: 'top',
                 },
             },
@@ -75,8 +63,6 @@ export class Notices extends BaseChart {
 
     chart = new Chart(this.canvas, this.config);
 
-    newSubs = 0;
-    newGiftedSubs = 0;
     newTimeouts = 0;
     newBans = 0;
     newRemoved = 0;
@@ -92,27 +78,6 @@ export class Notices extends BaseChart {
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
                 this.setupLoop();
-            },
-        });
-
-        this.eventBus.subscribe({
-            eventName: USERNOTICE,
-            eventCallback: (userNoticeMessage) => {
-                const {
-                    tags: { 'msg-id': msgId = '' },
-                } = userNoticeMessage;
-
-                if (msgId.match(/^(sub|resub)$/)) {
-                    this.newSubs++;
-                    return;
-                }
-
-                if (msgId.match(/^(subgift|submysterygift)$/)) {
-                    this.newGiftedSubs++;
-                    return;
-                }
-
-                console.log(userNoticeMessage);
             },
         });
 
@@ -144,16 +109,6 @@ export class Notices extends BaseChart {
         const firstMinute = getCurrentMinute();
 
         for (let i = 0; i < 30; i++) {
-            this.subs.push({
-                x: firstMinute - (30 - i) * 60000,
-                y: 0,
-            });
-
-            this.giftedSubs.push({
-                x: firstMinute - (30 - i) * 60000,
-                y: 0,
-            });
-
             this.timeouts.push({
                 x: firstMinute - (30 - i) * 60000,
                 y: 0,
@@ -163,25 +118,20 @@ export class Notices extends BaseChart {
                 x: firstMinute - (30 - i) * 60000,
                 y: 0,
             });
+
+            this.removed.push({
+                x: firstMinute - (30 - i) * 60000,
+                y: 0,
+            });
         }
 
         this.chart.update();
 
         const interval = setInterval(() => {
             const newMinute = getCurrentMinute();
-            const index = this.subs.findIndex((point) => point.x === newMinute);
+            const index = this.bans.findIndex((point) => point.x === newMinute);
 
             if (index === -1) {
-                this.subs.push({
-                    x: newMinute,
-                    y: this.newSubs,
-                });
-
-                this.giftedSubs.push({
-                    x: newMinute,
-                    y: this.newGiftedSubs,
-                });
-
                 this.timeouts.push({
                     x: newMinute,
                     y: this.newTimeouts,
@@ -191,23 +141,25 @@ export class Notices extends BaseChart {
                     x: newMinute,
                     y: this.newBans,
                 });
+
+                this.removed.push({
+                    x: newMinute,
+                    y: this.newRemoved,
+                });
             } else {
-                (this.subs[index] as ScatterDataPoint).y += this.newSubs;
-                (this.giftedSubs[index] as ScatterDataPoint).y += this.newGiftedSubs;
                 (this.timeouts[index] as ScatterDataPoint).y += this.newTimeouts;
                 (this.bans[index] as ScatterDataPoint).y += this.newBans;
+                (this.removed[index] as ScatterDataPoint).y += this.newRemoved;
             }
 
-            this.newSubs = 0;
-            this.newGiftedSubs = 0;
             this.newTimeouts = 0;
             this.newBans = 0;
+            this.newRemoved = 0;
 
-            if (this.subs.length > 30) {
-                this.subs.shift();
-                this.giftedSubs.shift();
+            if (this.bans.length > 30) {
                 this.timeouts.shift();
                 this.bans.shift();
+                this.removed.shift();
             }
 
             this.chart.update();
