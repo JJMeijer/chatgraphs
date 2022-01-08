@@ -5,7 +5,7 @@ import { Messages } from './Messages';
 import { ScrollBack } from './ScrollBack';
 
 const html = /*html*/ `
-    <div class="relative max-h-[95vh] w-1/4 border-r border-gray-700"></div>
+    <div class="relative h-3/4"></div>
 `;
 
 export class Chat {

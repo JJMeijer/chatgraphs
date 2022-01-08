@@ -12,7 +12,7 @@ import { Counters } from './Counters';
 import { Viewers } from './Viewers';
 
 const html = /*html*/ `
-    <div class="flex flex-col w-3/4 h-[95vh] overflow-y-scroll">
+    <div class="flex flex-col w-3/4 h-[95vh] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
         <div class="charts-content flex flex-row flex-wrap p-2">
     </div>
 `;
