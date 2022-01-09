@@ -10,6 +10,7 @@ import {
     CLEARCHAT,
     CLEARMSG,
     VIEWER_COUNT,
+    EMOTE_USED,
 } from './constants';
 
 export interface IrcTags {
@@ -69,6 +70,12 @@ interface ViewerCount {
     viewers: number;
 }
 
+interface EmoteUsed {
+    type: 'twitch' | 'ffz' | 'bttv' | '7tv';
+    emoteId: string;
+    emoteUrl: string;
+}
+
 type SubscriberEventCallback<U> = (eventData: U) => void;
 
 interface CloseAppSubscribeAction {
@@ -121,6 +128,11 @@ interface ViewerCountSubscribeAction {
     eventCallback: SubscriberEventCallback<ViewerCount>;
 }
 
+interface EmoteUsedSubscribeAction {
+    eventName: typeof EMOTE_USED;
+    eventCallback: SubscriberEventCallback<EmoteUsed>;
+}
+
 interface CloseAppPublishAction {
     eventName: typeof CLOSE_APP;
 }
@@ -168,6 +180,11 @@ interface ViewerCountPublishAction {
     eventData: ViewerCount;
 }
 
+interface EmoteUsedPublishAction {
+    eventName: typeof EMOTE_USED;
+    eventData: EmoteUsed;
+}
+
 export type SubscribeAction =
     | CloseAppSubscribeAction
     | TabClickSubscribeAction
@@ -178,7 +195,8 @@ export type SubscribeAction =
     | ClearchatMessageSubscribeAction
     | ClearMsgMessageSubscribeAction
     | ScrollToBottomSubscribeAction
-    | ViewerCountSubscribeAction;
+    | ViewerCountSubscribeAction
+    | EmoteUsedSubscribeAction;
 
 export type PublishAction =
     | CloseAppPublishAction
@@ -190,7 +208,8 @@ export type PublishAction =
     | ClearchatMessagePublishAction
     | ClearMsgMessagePublishAction
     | ScrollToBottomPublishAction
-    | ViewerCountPublishAction;
+    | ViewerCountPublishAction
+    | EmoteUsedPublishAction;
 
 export interface SubscriberDictionary {
     [CLOSE_APP]: SubscriberEventCallback<void>[];
@@ -203,6 +222,7 @@ export interface SubscriberDictionary {
     [CLEARMSG]: SubscriberEventCallback<ClearMsgMessage>[];
     [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
     [VIEWER_COUNT]: SubscriberEventCallback<ViewerCount>[];
+    [EMOTE_USED]: SubscriberEventCallback<EmoteUsed>[];
 }
 
 export interface BttvEmoteInfo {
@@ -231,6 +251,11 @@ export interface FrankerFacezResponse {
             }[];
         };
     };
+}
+
+export interface SevenTvEmoteInfo {
+    id: string;
+    name: string;
 }
 
 export interface TimeData {

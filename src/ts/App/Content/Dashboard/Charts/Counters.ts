@@ -1,4 +1,4 @@
-import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG, VIEWER_COUNT } from 'common/constants';
+import { CHANNEL_SUBMIT, CLOSE_APP, EMOTE_USED, PRIVMSG, VIEWER_COUNT } from 'common/constants';
 import { createElementFromHtml } from 'common/element';
 import { EventBus } from 'common/EventBus';
 
@@ -23,6 +23,11 @@ const html = /*html*/ `
             <span class="text-base">Distinct Chatters: </span>
             <span class="distinct-chatters text-lg font-bold">0</span>
         </div>
+
+        <div class="py-1 px-4 flex flex-col">
+            <span class="text-base">Emotes Used: </span>
+            <span class="emotes-used text-lg font-bold">0</span>
+        </div>
     </div>
 `;
 
@@ -33,8 +38,10 @@ export class Counters {
     distinctChattersElement = this.element.querySelector('.distinct-chatters') as HTMLSpanElement;
     timerElement = this.element.querySelector('.timer') as HTMLSpanElement;
     viewersElement = this.element.querySelector('.viewers') as HTMLSpanElement;
+    emotesUsedElement = this.element.querySelector('.emotes-used') as HTMLSpanElement;
 
     totalMessages = 0;
+    emotesUsed = 0;
     chatters: string[] = [];
 
     constructor(eventBus: EventBus) {
@@ -79,9 +86,7 @@ export class Counters {
 
                     const prependZero = (num: number) => (num < 10 ? `0${num}` : '' + num);
 
-                    this.timerElement.innerText = `${prependZero(hours)}:${prependZero(minutes)}:${prependZero(
-                        seconds,
-                    )}`;
+                    this.timerElement.innerText = `${prependZero(hours)}:${prependZero(minutes)}:${prependZero(seconds)}`;
                 }, 1000);
 
                 this.eventBus.subscribe({
@@ -97,6 +102,14 @@ export class Counters {
             eventName: VIEWER_COUNT,
             eventCallback: ({ viewers }) => {
                 this.viewersElement.innerText = viewers.toString();
+            },
+        });
+
+        this.eventBus.subscribe({
+            eventName: EMOTE_USED,
+            eventCallback: () => {
+                this.emotesUsed++;
+                this.emotesUsedElement.innerText = this.emotesUsed.toString();
             },
         });
     }

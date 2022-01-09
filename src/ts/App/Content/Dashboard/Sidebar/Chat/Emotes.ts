@@ -1,29 +1,71 @@
-import { ROOMSTATE } from 'common/constants';
+import { EMOTE_USED, ROOMSTATE } from 'common/constants';
 import { EventBus } from 'common/EventBus';
-import { BttvEmoteInfo, BttvResponse, FrankerFacezResponse, EmoteInfo } from 'common/types';
-
-const getTwitchEmoticonUrl = (emoteId: string): string => {
-    return `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/1.0`;
-};
-
-const getBttvEmoteUrl = (emoteId: string): string => {
-    return `https://cdn.betterttv.net/emote/${emoteId}/1x`;
-};
-
-const getFrankerFaceZEmoteUrl = (emoteId: string): string => {
-    return `https://cdn.frankerfacez.com/emoticon/${emoteId}/1`;
-};
+import { BttvEmoteInfo, BttvResponse, FrankerFacezResponse, EmoteInfo, SevenTvEmoteInfo } from 'common/types';
 
 export class EmoteFactory {
     eventBus: EventBus;
     bttvEmotes: EmoteInfo = {};
     frankerFacezEmotes: EmoteInfo = {};
+    sevenTvEmotes: EmoteInfo = {};
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
         this.setGlobalBttvEmotes();
+        this.setGlobalSevenTvEmotes();
 
         this.setSubscribers();
+    }
+
+    getTwitchEmoticonUrl(emoteId: string): string {
+        return `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/1.0`;
+    }
+
+    getBttvEmoteUrl(emoteId: string): string {
+        const type = 'bttv';
+        const emoteUrl = `https://cdn.betterttv.net/emote/${emoteId}/1x`;
+
+        this.eventBus.publish({
+            eventName: EMOTE_USED,
+            eventData: {
+                type,
+                emoteId,
+                emoteUrl,
+            },
+        });
+
+        return emoteUrl;
+    }
+
+    getFfzEmoteUrl(emoteId: string): string {
+        const type = 'ffz';
+        const emoteUrl = `https://cdn.frankerfacez.com/emoticon/${emoteId}/1`;
+
+        this.eventBus.publish({
+            eventName: EMOTE_USED,
+            eventData: {
+                type,
+                emoteId,
+                emoteUrl,
+            },
+        });
+
+        return emoteUrl;
+    }
+
+    getSevenTvEmoteUrl(emoteId: string): string {
+        const type = '7tv';
+        const emoteUrl = `https://cdn.7tv.app/emote/${emoteId}/1x`;
+
+        this.eventBus.publish({
+            eventName: EMOTE_USED,
+            eventData: {
+                type,
+                emoteId,
+                emoteUrl,
+            },
+        });
+
+        return emoteUrl;
     }
 
     emotify(content: string, twitchEmoteString: string | undefined): string {
@@ -40,7 +82,7 @@ export class EmoteFactory {
                     throw new Error('Emote id or locations are undefined');
                 }
 
-                const emoteUrl = getTwitchEmoticonUrl(emoteId);
+                const emoteUrl = this.getTwitchEmoticonUrl(emoteId);
 
                 emoteLocations.split(',').forEach((emoteLocation) => {
                     const [startStr, endStr] = emoteLocation.split('-');
@@ -59,6 +101,15 @@ export class EmoteFactory {
                     for (let i = start + 1; i < end + 1; i++) {
                         chars[i] = '';
                     }
+
+                    this.eventBus.publish({
+                        eventName: EMOTE_USED,
+                        eventData: {
+                            type: 'twitch',
+                            emoteId,
+                            emoteUrl,
+                        },
+                    });
                 });
             });
 
@@ -69,13 +120,18 @@ export class EmoteFactory {
         const emotifiedWords = words.map((word) => {
             const bttvId = this.bttvEmotes[word];
             const ffId = this.frankerFacezEmotes[word];
+            const sevenTvId = this.sevenTvEmotes[word];
 
             if (bttvId) {
-                return `<img class="inline" src="${getBttvEmoteUrl(bttvId)}" alt="${word}" title="${word}" />`;
+                return `<img class="inline" src="${this.getBttvEmoteUrl(bttvId)}" alt="${word}" title="${word}" />`;
             }
 
             if (ffId) {
-                return `<img class="inline" src="${getFrankerFaceZEmoteUrl(ffId)}" alt="${word}" title="${word}" />`;
+                return `<img class="inline" src="${this.getFfzEmoteUrl(ffId)}" alt="${word}" title="${word}" />`;
+            }
+
+            if (sevenTvId) {
+                return `<img class="inline" src="${this.getSevenTvEmoteUrl(sevenTvId)}" alt="${word}" title="${word}" />`;
             }
 
             /**
@@ -145,6 +201,34 @@ export class EmoteFactory {
         throw new Error('Failed to get channel FrankerFacez emotes');
     }
 
+    async setGlobalSevenTvEmotes(): Promise<void> {
+        const resp = await fetch('https://api.7tv.app/v2/emotes/global');
+
+        if (resp.ok) {
+            const data = (await resp.json()) as SevenTvEmoteInfo[];
+            data.forEach((emote) => {
+                this.sevenTvEmotes[emote.name] = emote.id;
+            });
+            return;
+        }
+
+        throw new Error('Failed to get global 7tv emotes');
+    }
+
+    async setChannelSevenTvEmotes(channelId: string): Promise<void> {
+        const resp = await fetch(`https://api.7tv.app/v2/users/${channelId}/emotes`);
+
+        if (resp.ok) {
+            const data = (await resp.json()) as SevenTvEmoteInfo[];
+            data.forEach((emote) => {
+                this.sevenTvEmotes[emote.name] = emote.id;
+            });
+            return;
+        }
+
+        throw new Error('Failed to get channel 7tv emotes');
+    }
+
     setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: ROOMSTATE,
@@ -159,6 +243,7 @@ export class EmoteFactory {
 
                 this.setChannelBttvEmotes(roomId);
                 this.setChannelFrankerFaceZEmotes(roomId);
+                this.setChannelSevenTvEmotes(roomId);
             },
         });
     }

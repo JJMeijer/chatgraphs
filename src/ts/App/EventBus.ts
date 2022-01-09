@@ -9,6 +9,7 @@ import {
     CLEARCHAT,
     CLEARMSG,
     VIEWER_COUNT,
+    EMOTE_USED,
 } from '../constants';
 import { SubscribeAction, SubscriberDictionary, PublishAction } from '../types';
 
@@ -27,6 +28,7 @@ export class EventBus {
             [CLEARMSG]: [],
             [SCROLL_TO_BOTTOM]: [],
             [VIEWER_COUNT]: [],
+            [EMOTE_USED]: [],
         };
     }
 
@@ -70,6 +72,10 @@ export class EventBus {
 
             case VIEWER_COUNT:
                 this.subscriberDictionary[VIEWER_COUNT].push(action.eventCallback);
+                break;
+
+            case EMOTE_USED:
+                this.subscriberDictionary[EMOTE_USED].push(action.eventCallback);
                 break;
 
             default:
@@ -117,6 +123,10 @@ export class EventBus {
 
             case VIEWER_COUNT:
                 this.subscriberDictionary[VIEWER_COUNT].forEach((callback) => callback(action.eventData));
+                break;
+
+            case EMOTE_USED:
+                this.subscriberDictionary[EMOTE_USED].forEach((callback) => callback(action.eventData));
                 break;
 
             default:

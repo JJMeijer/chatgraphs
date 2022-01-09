@@ -5,6 +5,7 @@ import './chartGlobalSetup';
 
 import { MessagesPerMinute } from './MessagesPerMinute';
 import { MessagesPerSecond } from './MessagesPerSecond';
+import { EmotesPerMessage } from './EmotesPerMessage';
 import { SubscribersPercentage } from './SubscribersPercentage';
 import { Subscribers } from './Subscribers';
 import { Moderation } from './Moderation';
@@ -23,6 +24,7 @@ export class Charts {
     charts: HTMLDivElement;
 
     messagesPerSecond: MessagesPerSecond;
+    emotesPerMessage: EmotesPerMessage;
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
     subscribers: Subscribers;
@@ -36,6 +38,7 @@ export class Charts {
         this.charts = this.element.querySelector('.charts-content') as HTMLDivElement;
 
         this.messagesPerSecond = new MessagesPerSecond(this.eventBus);
+        this.emotesPerMessage = new EmotesPerMessage(this.eventBus);
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
         this.subscribers = new Subscribers(this.eventBus);
@@ -51,6 +54,7 @@ export class Charts {
             this.counters.element,
             this.messagesPerSecond.element,
             this.subscribersPercentage.element,
+            this.emotesPerMessage.element,
             this.viewers.element,
             this.messagesPerMinute.element,
             this.subscribers.element,
