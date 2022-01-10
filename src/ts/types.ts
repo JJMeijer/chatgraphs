@@ -72,8 +72,8 @@ interface ViewerCount {
 
 interface EmoteUsed {
     type: 'twitch' | 'ffz' | 'bttv' | '7tv';
-    emoteId: string;
-    emoteUrl: string;
+    word: string;
+    url: string;
 }
 
 type SubscriberEventCallback<U> = (eventData: U) => void;
@@ -261,4 +261,10 @@ export interface SevenTvEmoteInfo {
 export interface TimeData {
     x: number;
     y: number;
+}
+
+export interface EmoteCounter {
+    word: string;
+    count: number;
+    url: string;
 }

@@ -2,6 +2,22 @@ import { EMOTE_USED, ROOMSTATE } from 'common/constants';
 import { EventBus } from 'common/EventBus';
 import { BttvEmoteInfo, BttvResponse, FrankerFacezResponse, EmoteInfo, SevenTvEmoteInfo } from 'common/types';
 
+const getTwitchEmoticonUrl = (emoteId: string): string => {
+    return `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/1.0`;
+};
+
+const getBttvEmoteUrl = (emoteId: string): string => {
+    return `https://cdn.betterttv.net/emote/${emoteId}/1x`;
+};
+
+const getFfzEmoteUrl = (emoteId: string): string => {
+    return `https://cdn.frankerfacez.com/emoticon/${emoteId}/1`;
+};
+
+const getSevenTvEmoteUrl = (emoteId: string): string => {
+    return `https://cdn.7tv.app/emote/${emoteId}/1x`;
+};
+
 export class EmoteFactory {
     eventBus: EventBus;
     bttvEmotes: EmoteInfo = {};
@@ -14,58 +30,6 @@ export class EmoteFactory {
         this.setGlobalSevenTvEmotes();
 
         this.setSubscribers();
-    }
-
-    getTwitchEmoticonUrl(emoteId: string): string {
-        return `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/1.0`;
-    }
-
-    getBttvEmoteUrl(emoteId: string): string {
-        const type = 'bttv';
-        const emoteUrl = `https://cdn.betterttv.net/emote/${emoteId}/1x`;
-
-        this.eventBus.publish({
-            eventName: EMOTE_USED,
-            eventData: {
-                type,
-                emoteId,
-                emoteUrl,
-            },
-        });
-
-        return emoteUrl;
-    }
-
-    getFfzEmoteUrl(emoteId: string): string {
-        const type = 'ffz';
-        const emoteUrl = `https://cdn.frankerfacez.com/emoticon/${emoteId}/1`;
-
-        this.eventBus.publish({
-            eventName: EMOTE_USED,
-            eventData: {
-                type,
-                emoteId,
-                emoteUrl,
-            },
-        });
-
-        return emoteUrl;
-    }
-
-    getSevenTvEmoteUrl(emoteId: string): string {
-        const type = '7tv';
-        const emoteUrl = `https://cdn.7tv.app/emote/${emoteId}/1x`;
-
-        this.eventBus.publish({
-            eventName: EMOTE_USED,
-            eventData: {
-                type,
-                emoteId,
-                emoteUrl,
-            },
-        });
-
-        return emoteUrl;
     }
 
     emotify(content: string, twitchEmoteString: string | undefined): string {
@@ -82,7 +46,7 @@ export class EmoteFactory {
                     throw new Error('Emote id or locations are undefined');
                 }
 
-                const emoteUrl = this.getTwitchEmoticonUrl(emoteId);
+                const url = getTwitchEmoticonUrl(emoteId);
 
                 emoteLocations.split(',').forEach((emoteLocation) => {
                     const [startStr, endStr] = emoteLocation.split('-');
@@ -96,7 +60,7 @@ export class EmoteFactory {
 
                     const word = chars.slice(start, end + 1).join('');
 
-                    chars[start] = `<img class="inline" src="${emoteUrl}" alt="${word}" title="${word}" />`;
+                    chars[start] = `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
 
                     for (let i = start + 1; i < end + 1; i++) {
                         chars[i] = '';
@@ -106,8 +70,8 @@ export class EmoteFactory {
                         eventName: EMOTE_USED,
                         eventData: {
                             type: 'twitch',
-                            emoteId,
-                            emoteUrl,
+                            word,
+                            url,
                         },
                     });
                 });
@@ -123,15 +87,47 @@ export class EmoteFactory {
             const sevenTvId = this.sevenTvEmotes[word];
 
             if (bttvId) {
-                return `<img class="inline" src="${this.getBttvEmoteUrl(bttvId)}" alt="${word}" title="${word}" />`;
+                const url = getBttvEmoteUrl(bttvId);
+
+                this.eventBus.publish({
+                    eventName: EMOTE_USED,
+                    eventData: {
+                        type: 'bttv',
+                        word,
+                        url,
+                    },
+                });
+
+                return `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
             }
 
             if (ffId) {
-                return `<img class="inline" src="${this.getFfzEmoteUrl(ffId)}" alt="${word}" title="${word}" />`;
+                const url = getFfzEmoteUrl(ffId);
+
+                this.eventBus.publish({
+                    eventName: EMOTE_USED,
+                    eventData: {
+                        type: 'ffz',
+                        word,
+                        url,
+                    },
+                });
+                return `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
             }
 
             if (sevenTvId) {
-                return `<img class="inline" src="${this.getSevenTvEmoteUrl(sevenTvId)}" alt="${word}" title="${word}" />`;
+                const url = getSevenTvEmoteUrl(sevenTvId);
+
+                this.eventBus.publish({
+                    eventName: EMOTE_USED,
+                    eventData: {
+                        type: '7tv',
+                        word,
+                        url,
+                    },
+                });
+
+                return `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
             }
 
             /**

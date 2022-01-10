@@ -5,16 +5,16 @@ import './chartGlobalSetup';
 
 import { MessagesPerMinute } from './MessagesPerMinute';
 import { MessagesPerSecond } from './MessagesPerSecond';
-import { EmotesPerMessage } from './EmotesPerMessage';
 import { SubscribersPercentage } from './SubscribersPercentage';
 import { Subscribers } from './Subscribers';
 import { Moderation } from './Moderation';
 import { Counters } from './Counters';
 import { Viewers } from './Viewers';
+import { TopEmotes } from './TopEmotes';
 
 const html = /*html*/ `
     <div class="flex flex-col w-3/4 h-[95vh] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
-        <div class="charts-content flex flex-row flex-wrap p-2">
+        <div class="charts-content flex flex-row flex-wrap">
     </div>
 `;
 
@@ -24,13 +24,13 @@ export class Charts {
     charts: HTMLDivElement;
 
     messagesPerSecond: MessagesPerSecond;
-    emotesPerMessage: EmotesPerMessage;
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
     subscribers: Subscribers;
     moderation: Moderation;
     counters: Counters;
     viewers: Viewers;
+    topEmotes: TopEmotes;
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
@@ -38,13 +38,13 @@ export class Charts {
         this.charts = this.element.querySelector('.charts-content') as HTMLDivElement;
 
         this.messagesPerSecond = new MessagesPerSecond(this.eventBus);
-        this.emotesPerMessage = new EmotesPerMessage(this.eventBus);
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
         this.subscribers = new Subscribers(this.eventBus);
         this.moderation = new Moderation(this.eventBus);
         this.counters = new Counters(this.eventBus);
         this.viewers = new Viewers(this.eventBus);
+        this.topEmotes = new TopEmotes(this.eventBus);
 
         this.render();
     }
@@ -54,11 +54,11 @@ export class Charts {
             this.counters.element,
             this.messagesPerSecond.element,
             this.subscribersPercentage.element,
-            this.emotesPerMessage.element,
             this.viewers.element,
             this.messagesPerMinute.element,
             this.subscribers.element,
             this.moderation.element,
+            this.topEmotes.element,
         );
     }
 }

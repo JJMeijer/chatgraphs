@@ -3,7 +3,7 @@ import { createElementFromHtml } from 'common/element';
 import { EventBus } from 'common/EventBus';
 
 const html = /*html*/ `
-    <div class="flex flex-row items-center w-full">
+    <div class="flex flex-row justify-evenly w-full p-2">
         <div class="py-1 px-4 flex flex-col">
             <span class="text-base">Dashboard Uptime: </span>
             <span class="timer text-lg font-bold">00:00:00</span>
