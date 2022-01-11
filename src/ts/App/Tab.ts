@@ -97,11 +97,16 @@ export class Tab {
     }
 
     delete(): void {
-        // Focus previousSibling before deleting
+        // Focus previousSibling before deleting, else create new tab
         const sibling = this.element.previousElementSibling;
 
         if (sibling instanceof HTMLLabelElement) {
             sibling.click();
+        }
+
+        // If tab is the last remaining tab create a new one
+        if ((document.getElementById('tabs') as HTMLDivElement).childElementCount === 2) {
+            (document.getElementById('add-tab') as HTMLDivElement).click();
         }
 
         this.element.remove();

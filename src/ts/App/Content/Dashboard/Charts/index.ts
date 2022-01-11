@@ -10,7 +10,6 @@ import { Subscribers } from './Subscribers';
 import { Moderation } from './Moderation';
 import { Counters } from './Counters';
 import { Viewers } from './Viewers';
-import { TopEmotes } from './TopEmotes';
 
 const html = /*html*/ `
     <div class="flex flex-col w-3/4 h-[95vh] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
@@ -30,7 +29,6 @@ export class Charts {
     moderation: Moderation;
     counters: Counters;
     viewers: Viewers;
-    topEmotes: TopEmotes;
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
@@ -44,7 +42,6 @@ export class Charts {
         this.moderation = new Moderation(this.eventBus);
         this.counters = new Counters(this.eventBus);
         this.viewers = new Viewers(this.eventBus);
-        this.topEmotes = new TopEmotes(this.eventBus);
 
         this.render();
     }
@@ -58,7 +55,6 @@ export class Charts {
             this.messagesPerMinute.element,
             this.subscribers.element,
             this.moderation.element,
-            this.topEmotes.element,
         );
     }
 }
