@@ -1,11 +1,11 @@
-import { Chart, ChartConfiguration, ScatterDataPoint } from 'chart.js';
-import { PRIVMSG, CLOSE_APP, CHANNEL_SUBMIT } from 'common/constants';
+import { ScatterDataPoint, ChartConfiguration, Chart } from 'chart.js';
+import { CHANNEL_SUBMIT, CLOSE_APP, EMOTE_USED, PRIVMSG } from 'common/constants';
 
 import { EventBus } from 'common/EventBus';
 import { BaseChart } from './BaseChart';
 import { getSecondRoundedTo } from './helpers';
 
-export class SubscribersPercentage extends BaseChart {
+export class EmotesPerMessage extends BaseChart {
     data: ScatterDataPoint[] = [];
     config: ChartConfiguration = {
         type: 'line',
@@ -45,7 +45,7 @@ export class SubscribersPercentage extends BaseChart {
             plugins: {
                 title: {
                     display: true,
-                    text: '% Messages from Subscribers (Last 5 Minutes)',
+                    text: 'Emotes % per Message (Last 5 Minutes)',
                     position: 'top',
                 },
                 tooltip: {
@@ -69,16 +69,14 @@ export class SubscribersPercentage extends BaseChart {
 
     chart = new Chart(this.canvas, this.config);
 
-    newMessages = 0;
-    subscriberMessages = 0;
+    newWords = 0;
+    newEmotes = 0;
 
     constructor(eventBus: EventBus) {
         super(eventBus);
-
-        this.setSubscribers();
     }
 
-    override setSubscribers() {
+    override setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
@@ -88,21 +86,20 @@ export class SubscribersPercentage extends BaseChart {
 
         this.eventBus.subscribe({
             eventName: PRIVMSG,
-            eventCallback: (privMsgMessage) => {
-                this.newMessages++;
+            eventCallback: ({ content }) => {
+                this.newWords += content.split(' ').length;
+            },
+        });
 
-                const {
-                    tags: { subscriber },
-                } = privMsgMessage;
-
-                if (subscriber === '1') {
-                    this.subscriberMessages++;
-                }
+        this.eventBus.subscribe({
+            eventName: EMOTE_USED,
+            eventCallback: () => {
+                this.newEmotes++;
             },
         });
     }
 
-    setupLoop() {
+    setupLoop(): void {
         const currentSecond = getSecondRoundedTo(10);
 
         if (this.data.length === 0) {
@@ -116,17 +113,17 @@ export class SubscribersPercentage extends BaseChart {
 
         this.chart.update();
 
-        const loop = setInterval(() => {
+        const interval = setInterval(() => {
             const currentSecond = getSecondRoundedTo(10);
 
-            if (this.newMessages > 0) {
+            if (this.newEmotes > 0) {
                 this.data.push({
                     x: currentSecond,
-                    y: this.subscriberMessages / this.newMessages,
+                    y: this.newEmotes / this.newWords,
                 });
 
-                this.newMessages = 0;
-                this.subscriberMessages = 0;
+                this.newEmotes = 0;
+                this.newWords = 0;
             }
 
             if (this.data.length > 30) {
@@ -139,7 +136,7 @@ export class SubscribersPercentage extends BaseChart {
         this.eventBus.subscribe({
             eventName: CLOSE_APP,
             eventCallback: () => {
-                clearInterval(loop);
+                clearInterval(interval);
             },
         });
     }

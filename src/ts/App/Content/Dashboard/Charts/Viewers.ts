@@ -51,13 +51,9 @@ export class Viewers extends BaseChart {
 
     constructor(eventBus: EventBus) {
         super(eventBus);
-
-        this.canvas.id = 'viewers';
-
-        this.setSubscribers();
     }
 
-    setSubscribers(): void {
+    override setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {

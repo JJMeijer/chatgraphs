@@ -69,11 +69,9 @@ export class Moderation extends BaseChart {
 
     constructor(eventBus: EventBus) {
         super(eventBus);
-
-        this.setSubscribers();
     }
 
-    setSubscribers() {
+    override setSubscribers() {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {

@@ -32,6 +32,6 @@ export class BaseCounter {
     }
 
     setSubscribers(): void {
-        // noop
+        // PASS
     }
 }

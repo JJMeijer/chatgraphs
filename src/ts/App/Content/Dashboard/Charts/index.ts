@@ -10,6 +10,7 @@ import { Subscribers } from './Subscribers';
 import { Moderation } from './Moderation';
 import { Counters } from './Counters';
 import { Viewers } from './Viewers';
+import { EmotesPerMessage } from './EmotesPerMessage';
 
 const html = /*html*/ `
     <div class="flex flex-col w-3/4 h-[95vh] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
@@ -25,6 +26,7 @@ export class Charts {
     messagesPerSecond: MessagesPerSecond;
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
+    emotesPerMessage: EmotesPerMessage;
     subscribers: Subscribers;
     moderation: Moderation;
     counters: Counters;
@@ -38,6 +40,7 @@ export class Charts {
         this.messagesPerSecond = new MessagesPerSecond(this.eventBus);
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
+        this.emotesPerMessage = new EmotesPerMessage(this.eventBus);
         this.subscribers = new Subscribers(this.eventBus);
         this.moderation = new Moderation(this.eventBus);
         this.counters = new Counters(this.eventBus);
@@ -53,6 +56,7 @@ export class Charts {
             this.subscribersPercentage.element,
             this.viewers.element,
             this.messagesPerMinute.element,
+            this.emotesPerMessage.element,
             this.subscribers.element,
             this.moderation.element,
         );

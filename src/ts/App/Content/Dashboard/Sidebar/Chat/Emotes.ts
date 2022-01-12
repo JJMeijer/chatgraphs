@@ -156,7 +156,7 @@ export class EmoteFactory {
             return;
         }
 
-        throw new Error('Failed to get global bttv emotes');
+        console.info('Failed to get global bttv emotes');
     }
 
     async setChannelBttvEmotes(channelId: string): Promise<void> {
@@ -171,7 +171,7 @@ export class EmoteFactory {
             return;
         }
 
-        throw new Error('Failed to get channel bttv emotes');
+        console.info('Failed to get channel bttv emotes');
     }
 
     async setChannelFrankerFaceZEmotes(channelId: string): Promise<void> {
@@ -194,7 +194,7 @@ export class EmoteFactory {
             return;
         }
 
-        throw new Error('Failed to get channel FrankerFacez emotes');
+        console.info('Failed to get channel FrankerFacez emotes');
     }
 
     async setGlobalSevenTvEmotes(): Promise<void> {
@@ -208,7 +208,7 @@ export class EmoteFactory {
             return;
         }
 
-        throw new Error('Failed to get global 7tv emotes');
+        console.info('Failed to get global 7tv emotes');
     }
 
     async setChannelSevenTvEmotes(channelId: string): Promise<void> {
@@ -222,7 +222,7 @@ export class EmoteFactory {
             return;
         }
 
-        throw new Error('Failed to get channel 7tv emotes');
+        console.info('Failed to get channel 7tv emotes');
     }
 
     setSubscribers(): void {

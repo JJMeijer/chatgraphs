@@ -5,10 +5,9 @@
     "author": "18067438+JJMeijer@users.noreply.github.com",
     "license": "MIT",
     "scripts": {
+        "build": "node esbuild.js build && tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --minify",
         "css:watch": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --watch",
-        "css:build": "tailwindcss -i ./src/css/main.css -o ./www/static/css/main-dist.css --minify",
         "js:watch": "node esbuild.js watch",
-        "js:build": "node esbuild.js build",
         "js:lint": "eslint src -c .eslintrc && tsc --noEmit"
     },
     "devDependencies": {

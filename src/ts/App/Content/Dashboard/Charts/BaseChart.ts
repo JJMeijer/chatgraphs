@@ -14,5 +14,11 @@ export class BaseChart {
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
+
+        this.setSubscribers();
+    }
+
+    setSubscribers(): void {
+        // PASS
     }
 }
