@@ -3,16 +3,17 @@ import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG } from 'common/constants';
 import { EventBus } from 'common/EventBus';
 
 import { BaseChart } from './BaseChart';
-import { getSecondRoundedTo } from './helpers';
+import { getCurrentSecond } from './helpers';
 
 export class MessagesPerSecond extends BaseChart {
     data: ScatterDataPoint[] = [];
     config: ChartConfiguration = {
-        type: 'line',
+        type: 'bar',
         data: {
             datasets: [
                 {
                     data: this.data,
+                    borderRadius: 10,
                 },
             ],
         },
@@ -34,12 +35,15 @@ export class MessagesPerSecond extends BaseChart {
                     type: 'linear',
                     min: 0,
                     beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                    },
                 },
             },
             plugins: {
                 title: {
                     display: true,
-                    text: 'Avg. Messages per Second (Last 5 Minutes)',
+                    text: 'Messages per Second (Last 5 Minutes)',
                     position: 'top',
                 },
                 legend: {
@@ -55,26 +59,29 @@ export class MessagesPerSecond extends BaseChart {
 
     constructor(eventBus: EventBus) {
         super(eventBus);
+    }
 
-        this.setupLoop();
+    setInitData(): void {
+        const currentSecond = getCurrentSecond();
+
+        if (this.data.length === 0) {
+            for (let i = 0; i < 300; i++) {
+                this.data.push({
+                    x: currentSecond - (300 - i) * 1000,
+                    y: NaN,
+                });
+            }
+        }
+
+        this.chart.update();
     }
 
     override setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
-                const currentSecond = getSecondRoundedTo(5);
-
-                if (this.data.length === 0) {
-                    for (let i = 0; i < 60; i++) {
-                        this.data.push({
-                            x: currentSecond - (60 - i) * 5000,
-                            y: NaN,
-                        });
-                    }
-                }
-
-                this.chart.update();
+                this.setInitData();
+                this.setupLoop();
             },
         });
 
@@ -88,23 +95,21 @@ export class MessagesPerSecond extends BaseChart {
 
     setupLoop(): void {
         const loop = setInterval(() => {
-            const currentSecond = getSecondRoundedTo(5);
+            const currentSecond = getCurrentSecond();
 
-            if (this.newMessages > 0) {
-                this.data.push({
-                    x: currentSecond,
-                    y: this.newMessages / 5,
-                });
+            this.data.push({
+                x: currentSecond,
+                y: this.newMessages,
+            });
 
-                this.newMessages = 0;
-            }
+            this.newMessages = 0;
 
-            if (this.data.length > 60) {
+            if (this.data.length > 300) {
                 this.data.shift();
             }
 
             this.chart.update();
-        }, 5000);
+        }, 1000);
 
         this.eventBus.subscribe({
             eventName: CLOSE_APP,
