@@ -5,7 +5,7 @@ import { Chat } from './Chat';
 import { Embed } from './Embed';
 
 const html = /*html*/ `
-    <div class="relative h-[75vh] sm:h-[95vh] w-full sm:w-1/2 lg:w-1/4 sm:border-r border-gray-700"></div>
+    <div class="relative h-[75vh] md:h-[95vh] w-full md:w-1/2 lg:w-1/4 md:border-r border-gray-700"></div>
 `;
 
 export class Sidebar {

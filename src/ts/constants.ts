@@ -17,4 +17,4 @@ export const UNKNOWN = 'unknown';
 export const ARROW_UP = '&uarr;';
 export const ARROW_DOWN = '&darr;';
 export const ARROW_LEFT = '&larr;';
-export const ARROR_RIHGT = '&rarr;';
+export const ARROW_RIGHT = '&rarr;';

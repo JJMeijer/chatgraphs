@@ -59,6 +59,8 @@ export class MessagesPerSecond extends BaseChart {
 
     constructor(eventBus: EventBus) {
         super(eventBus);
+
+        this.setSubscribers();
     }
 
     setInitData(): void {
@@ -76,7 +78,7 @@ export class MessagesPerSecond extends BaseChart {
         this.chart.update();
     }
 
-    override setSubscribers(): void {
+    setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {

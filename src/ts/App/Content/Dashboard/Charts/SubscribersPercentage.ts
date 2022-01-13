@@ -78,7 +78,7 @@ export class SubscribersPercentage extends BaseChart {
         this.setSubscribers();
     }
 
-    override setSubscribers() {
+    setSubscribers() {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {

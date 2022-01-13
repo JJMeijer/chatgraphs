@@ -48,9 +48,11 @@ export class MessagesPerMinute extends BaseChart {
 
     constructor(eventBus: EventBus) {
         super(eventBus);
+
+        this.setSubscribers();
     }
 
-    override setSubscribers(): void {
+    setSubscribers(): void {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {

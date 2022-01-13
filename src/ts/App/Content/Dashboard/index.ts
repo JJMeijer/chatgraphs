@@ -4,7 +4,7 @@ import { createElementFromHtml } from 'common/element';
 import { Sidebar } from './Sidebar';
 
 const html = /*html*/ `
-    <div class="flex flex-col sm:flex-row h-full w-full bg-gray-800"></div>
+    <div class="flex flex-col md:flex-row h-full w-full bg-gray-800"></div>
 `;
 
 export class Dashboard {

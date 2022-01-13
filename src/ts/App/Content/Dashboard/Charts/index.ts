@@ -11,11 +11,27 @@ import { Moderation } from './Moderation';
 import { Counters } from './Counters';
 import { Viewers } from './Viewers';
 import { EmotesPerMessage } from './EmotesPerMessage';
-import { CHANNEL_SUBMIT } from 'common/constants';
+import { CHANNEL_SUBMIT, CHAT_VISIBILITY } from 'common/constants';
 import { HideChatButton } from './HideChatButton';
 
 const html = /*html*/ `
-    <div class="relative flex flex-col w-full sm:w-1/2 lg:w-3/4 h-[95vh] sm:overflow-y-scroll sm:scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
+    <div class="
+        relative
+        flex
+        flex-col
+        w-full
+        md:w-1/2
+        lg:w-3/4
+        h-[95vh]
+        md:overflow-y-scroll
+        md:scrollbar-thin
+        scrollbar-thumb-gray-600
+        hover:scrollbar-thumb-gray-500
+        border-t border-gray-700
+        md:border-t-0
+        pt-3
+        md:pt-0
+    ">
         <div class="charts-content flex flex-row flex-wrap">
     </div>
 `;
@@ -65,6 +81,19 @@ export class Charts {
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
                 this.show();
+            },
+        });
+
+        this.eventBus.subscribe({
+            eventName: CHAT_VISIBILITY,
+            eventCallback: ({ visible }) => {
+                if (visible) {
+                    this.element.classList.add('md:w-1/2');
+                    this.element.classList.add('lg:w-3/4');
+                } else {
+                    this.element.classList.remove('md:w-1/2');
+                    this.element.classList.remove('lg:w-3/4');
+                }
             },
         });
     }
