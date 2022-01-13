@@ -10,6 +10,7 @@ import {
     CLEARMSG,
     VIEWER_COUNT,
     EMOTE_USED,
+    CHAT_VISIBILITY,
 } from '../constants';
 import { SubscribeAction, SubscriberDictionary, PublishAction } from '../types';
 
@@ -29,6 +30,7 @@ export class EventBus {
             [SCROLL_TO_BOTTOM]: [],
             [VIEWER_COUNT]: [],
             [EMOTE_USED]: [],
+            [CHAT_VISIBILITY]: [],
         };
     }
 
@@ -76,6 +78,10 @@ export class EventBus {
 
             case EMOTE_USED:
                 this.subscriberDictionary[EMOTE_USED].push(action.eventCallback);
+                break;
+
+            case CHAT_VISIBILITY:
+                this.subscriberDictionary[CHAT_VISIBILITY].push(action.eventCallback);
                 break;
 
             default:
@@ -127,6 +133,10 @@ export class EventBus {
 
             case EMOTE_USED:
                 this.subscriberDictionary[EMOTE_USED].forEach((callback) => callback(action.eventData));
+                break;
+
+            case CHAT_VISIBILITY:
+                this.subscriberDictionary[CHAT_VISIBILITY].forEach((callback) => callback(action.eventData));
                 break;
 
             default:

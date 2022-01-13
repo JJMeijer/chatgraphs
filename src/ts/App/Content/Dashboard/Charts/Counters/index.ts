@@ -7,7 +7,7 @@ import { ChatterCounter } from './ChatterCounter';
 import { EmotesCounter } from './EmotesCounter';
 
 const html = /*html*/ `
-    <div class="flex flex-row justify-evenly w-full p-2"></div>
+    <div class="flex flex-row flex-wrap justify-evenly w-full p-2"></div>
 `;
 
 export class Counters {

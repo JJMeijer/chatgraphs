@@ -27,7 +27,7 @@ const createTabElement = (): HTMLLabelElement => {
                     text-gray-400
                     cursor-pointer
                     text-base
-                    text-transparent
+                    sm:text-transparent
                     group-hover:text-gray-400
                     hover:!text-gray-100
                 ">

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .no-overflow-anchor {
+        overflow-anchor: none;
+    }
+}

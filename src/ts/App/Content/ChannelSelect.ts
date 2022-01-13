@@ -5,8 +5,8 @@ import { EventBus } from '../EventBus';
 const html = /*html*/ `
     <div
         class="
+        hidden
             absolute
-            border-b border-gray-700
             h-full
             w-full
             flex flex-col
@@ -14,7 +14,7 @@ const html = /*html*/ `
             items-center
             bg-gray-800
             transition-opacity
-            duration-500
+            duration-1000
         "
     >
         <div class="mb-[5%] border-b border-gray-700">
@@ -30,7 +30,6 @@ const html = /*html*/ `
                     bg-gray-800
                     outline-none
                     text-3xl
-                    w-96
                     p-2
                 "
             />

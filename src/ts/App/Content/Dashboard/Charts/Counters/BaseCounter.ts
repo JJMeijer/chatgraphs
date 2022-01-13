@@ -2,7 +2,7 @@ import { EventBus } from 'common/EventBus';
 import { createElementFromHtml } from 'common/element';
 
 const html = /*html*/ `
-    <div class="py-1 px-4 flex flex-col">
+    <div class="py-2 px-4 flex flex-col w-44">
         <span class="counter-title text-base"></span>
         <span class="counter-content text-lg font-bold"></span>
     </div>

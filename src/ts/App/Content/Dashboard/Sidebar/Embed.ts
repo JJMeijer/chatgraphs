@@ -3,7 +3,7 @@ import { createElementFromHtml } from 'common/element';
 import { EventBus } from 'common/EventBus';
 
 const html = /*html*/ `
-    <div class="h-1/4 border-b border-gray-700">
+    <div class="h-1/3 sm:h-1/4 border-b border-gray-700">
     <iframe
         src=""
         height="100%"

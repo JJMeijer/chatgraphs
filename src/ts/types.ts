@@ -11,6 +11,7 @@ import {
     CLEARMSG,
     VIEWER_COUNT,
     EMOTE_USED,
+    CHAT_VISIBILITY,
 } from './constants';
 
 export interface IrcTags {
@@ -76,6 +77,10 @@ interface EmoteUsed {
     url: string;
 }
 
+interface ChatVisibility {
+    visible: boolean;
+}
+
 type SubscriberEventCallback<U> = (eventData: U) => void;
 
 interface CloseAppSubscribeAction {
@@ -133,6 +138,11 @@ interface EmoteUsedSubscribeAction {
     eventCallback: SubscriberEventCallback<EmoteUsed>;
 }
 
+interface HideChatSubscribeAction {
+    eventName: typeof CHAT_VISIBILITY;
+    eventCallback: SubscriberEventCallback<ChatVisibility>;
+}
+
 interface CloseAppPublishAction {
     eventName: typeof CLOSE_APP;
 }
@@ -185,6 +195,11 @@ interface EmoteUsedPublishAction {
     eventData: EmoteUsed;
 }
 
+interface HideChatPublishAction {
+    eventName: typeof CHAT_VISIBILITY;
+    eventData: ChatVisibility;
+}
+
 export type SubscribeAction =
     | CloseAppSubscribeAction
     | TabClickSubscribeAction
@@ -196,7 +211,8 @@ export type SubscribeAction =
     | ClearMsgMessageSubscribeAction
     | ScrollToBottomSubscribeAction
     | ViewerCountSubscribeAction
-    | EmoteUsedSubscribeAction;
+    | EmoteUsedSubscribeAction
+    | HideChatSubscribeAction;
 
 export type PublishAction =
     | CloseAppPublishAction
@@ -209,7 +225,8 @@ export type PublishAction =
     | ClearMsgMessagePublishAction
     | ScrollToBottomPublishAction
     | ViewerCountPublishAction
-    | EmoteUsedPublishAction;
+    | EmoteUsedPublishAction
+    | HideChatPublishAction;
 
 export interface SubscriberDictionary {
     [CLOSE_APP]: SubscriberEventCallback<void>[];
@@ -223,6 +240,7 @@ export interface SubscriberDictionary {
     [SCROLL_TO_BOTTOM]: SubscriberEventCallback<void>[];
     [VIEWER_COUNT]: SubscriberEventCallback<ViewerCount>[];
     [EMOTE_USED]: SubscriberEventCallback<EmoteUsed>[];
+    [CHAT_VISIBILITY]: SubscriberEventCallback<ChatVisibility>[];
 }
 
 export interface BttvEmoteInfo {
