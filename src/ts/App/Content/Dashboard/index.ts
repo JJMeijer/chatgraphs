@@ -1,6 +1,7 @@
-import { EventBus } from '../../EventBus';
-import { Charts } from './Charts';
+import { EventBus } from 'common/EventBus';
 import { createElementFromHtml } from 'common/element';
+
+import { Visualizations } from './Visualizations';
 import { Sidebar } from './Sidebar';
 
 const html = /*html*/ `
@@ -12,20 +13,20 @@ export class Dashboard {
     element: HTMLDivElement;
 
     sidebar: Sidebar;
-    charts: Charts;
+    visualizations: Visualizations;
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
 
         this.element = createElementFromHtml<HTMLDivElement>(html);
         this.sidebar = new Sidebar(this.eventBus);
-        this.charts = new Charts(this.eventBus);
+        this.visualizations = new Visualizations(this.eventBus);
 
         this.render();
     }
 
     render(): void {
         this.element.appendChild(this.sidebar.element);
-        this.element.appendChild(this.charts.element);
+        this.element.appendChild(this.visualizations.element);
     }
 }

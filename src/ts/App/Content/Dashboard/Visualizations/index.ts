@@ -3,14 +3,17 @@ import { EventBus } from 'common/EventBus';
 
 import './chartGlobalSetup';
 
-import { MessagesPerMinute } from './MessagesPerMinute';
-import { MessagesPerSecond } from './MessagesPerSecond';
-import { SubscribersPercentage } from './SubscribersPercentage';
-import { Subscribers } from './Subscribers';
-import { Moderation } from './Moderation';
+import {
+    MessagesPerMinute,
+    MessagesPerSecond,
+    EmotesPerMessage,
+    Moderation,
+    Subscribers,
+    SubscribersPercentage,
+    Viewers,
+} from './Charts';
 import { Counters } from './Counters';
-import { Viewers } from './Viewers';
-import { EmotesPerMessage } from './EmotesPerMessage';
+
 import { CHANNEL_SUBMIT, CHAT_VISIBILITY } from 'common/constants';
 import { HideChatButton } from './HideChatButton';
 
@@ -36,7 +39,7 @@ const html = /*html*/ `
     </div>
 `;
 
-export class Charts {
+export class Visualizations {
     eventBus: EventBus;
     element: HTMLDivElement;
     charts: HTMLDivElement;

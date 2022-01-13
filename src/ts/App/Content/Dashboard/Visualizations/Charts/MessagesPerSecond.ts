@@ -6,14 +6,15 @@ import { BaseChart } from './BaseChart';
 import { getCurrentSecond } from './helpers';
 
 export class MessagesPerSecond extends BaseChart {
-    data: ScatterDataPoint[] = [];
+    barData: ScatterDataPoint[] = [];
+
     config: ChartConfiguration = {
         type: 'bar',
         data: {
             datasets: [
                 {
-                    data: this.data,
-                    borderRadius: 10,
+                    type: 'bar',
+                    data: this.barData,
                 },
             ],
         },
@@ -66,13 +67,11 @@ export class MessagesPerSecond extends BaseChart {
     setInitData(): void {
         const currentSecond = getCurrentSecond();
 
-        if (this.data.length === 0) {
-            for (let i = 0; i < 300; i++) {
-                this.data.push({
-                    x: currentSecond - (300 - i) * 1000,
-                    y: NaN,
-                });
-            }
+        for (let i = 0; i < 300; i++) {
+            this.barData.push({
+                x: currentSecond - (300 - i) * 1000,
+                y: NaN,
+            });
         }
 
         this.chart.update();
@@ -83,7 +82,7 @@ export class MessagesPerSecond extends BaseChart {
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
                 this.setInitData();
-                this.setupLoop();
+                this.setupLoops();
             },
         });
 
@@ -95,19 +94,19 @@ export class MessagesPerSecond extends BaseChart {
         });
     }
 
-    setupLoop(): void {
-        const loop = setInterval(() => {
+    setupLoops(): void {
+        const secondInterval = setInterval(() => {
             const currentSecond = getCurrentSecond();
 
-            this.data.push({
+            this.barData.push({
                 x: currentSecond,
                 y: this.newMessages,
             });
 
             this.newMessages = 0;
 
-            if (this.data.length > 300) {
-                this.data.shift();
+            if (this.barData.length > 300) {
+                this.barData.shift();
             }
 
             this.chart.update();
@@ -116,7 +115,7 @@ export class MessagesPerSecond extends BaseChart {
         this.eventBus.subscribe({
             eventName: CLOSE_APP,
             eventCallback: () => {
-                clearInterval(loop);
+                clearInterval(secondInterval);
             },
         });
     }
