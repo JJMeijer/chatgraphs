@@ -1,8 +1,6 @@
 import { createElementFromHtml } from 'common/element';
 import { EventBus } from 'common/EventBus';
 
-import './chartGlobalSetup';
-
 import {
     MessagesPerMinute,
     MessagesPerSecond,
@@ -13,9 +11,12 @@ import {
     Viewers,
 } from './Charts';
 import { Counters } from './Counters';
+import { TopChatters } from './Tables';
 
 import { CHANNEL_SUBMIT, CHAT_VISIBILITY } from 'common/constants';
 import { HideChatButton } from './HideChatButton';
+
+import './Charts/chartGlobalSetup';
 
 const html = /*html*/ `
     <div class="
@@ -55,6 +56,8 @@ export class Visualizations {
     counters: Counters;
     viewers: Viewers;
 
+    topChatters: TopChatters;
+
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
         this.element = createElementFromHtml<HTMLDivElement>(html);
@@ -68,6 +71,8 @@ export class Visualizations {
         this.moderation = new Moderation(this.eventBus);
         this.counters = new Counters(this.eventBus);
         this.viewers = new Viewers(this.eventBus);
+
+        this.topChatters = new TopChatters(this.eventBus);
 
         this.hideChatButton = new HideChatButton(this.eventBus);
 
@@ -111,6 +116,7 @@ export class Visualizations {
             this.emotesPerMessage.element,
             this.subscribers.element,
             this.moderation.element,
+            this.topChatters.element,
         );
 
         this.element.appendChild(this.hideChatButton.element);

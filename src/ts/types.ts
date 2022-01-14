@@ -286,3 +286,7 @@ export interface EmoteCounter {
     count: number;
     url: string;
 }
+
+export interface TableData {
+    [key: string]: string | number;
+}

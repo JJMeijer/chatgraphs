@@ -5,6 +5,7 @@ import { EventBus } from '../EventBus';
 const html = /*html*/ `
     <div
         class="
+        hidden
             absolute
             h-full
             w-full
