@@ -290,3 +290,12 @@ export interface EmoteCounter {
 export interface TableData {
     [key: string]: string | number;
 }
+
+export interface ChatterInfo {
+    count: number;
+    badges: string;
+}
+
+export interface ChatterInfoDictionary {
+    [key: string]: ChatterInfo;
+}
