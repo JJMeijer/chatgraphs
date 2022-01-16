@@ -163,6 +163,7 @@ export class IrcClient {
                 case '376':
                 case 'CAP':
                 case 'JOIN':
+                case 'PART':
                     return {
                         keyword,
                         source,

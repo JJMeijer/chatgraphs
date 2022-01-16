@@ -29,6 +29,7 @@
             "common/EventBus": ["./src/ts/App/EventBus"],
             "common/types": ["./src/ts/types"],
             "common/constants": ["./src/ts/constants"],
+            "common/Factories": ["./src/ts/App/Content/Factories"]
         },
         // "rootDirs": [],
         // "typeRoots": [],

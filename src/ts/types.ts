@@ -46,7 +46,7 @@ export interface ClearMsgMessage extends BaseMessage {
 }
 
 export interface SystemMessage extends BaseMessage {
-    keyword: '001' | '002' | '003' | '004' | '353' | '366' | '372' | '375' | '376' | 'CAP' | 'JOIN';
+    keyword: '001' | '002' | '003' | '004' | '353' | '366' | '372' | '375' | '376' | 'CAP' | 'JOIN' | 'PART';
 }
 
 export interface UnknownMessage extends BaseMessage {
@@ -298,4 +298,28 @@ export interface ChatterInfo {
 
 export interface ChatterInfoDictionary {
     [key: string]: ChatterInfo;
+}
+
+export interface BadgeInfo {
+    [key: string]: {
+        title: string;
+        url: string;
+    };
+}
+
+export interface BadgeResponseVersionItem {
+    title: string;
+    image_url_1x: string;
+}
+
+export interface BadgeReponseItem {
+    versions: {
+        [key: string]: BadgeResponseVersionItem;
+    };
+}
+
+export interface BadgeResponse {
+    badge_sets: {
+        [key: string]: BadgeReponseItem;
+    };
 }

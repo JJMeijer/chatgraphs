@@ -1,6 +1,6 @@
 import { createElementFromHtml } from 'common/element';
 import { PrivMsgMessage } from 'common/types';
-import { EmoteFactory } from './Emotes';
+import { EmoteFactory } from 'common/Factories';
 
 const createMessageElement = (time: string, color: string, username: string, content: string) => {
     const html = /*html*/ `

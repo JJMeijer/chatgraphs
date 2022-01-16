@@ -5,7 +5,7 @@ import { createElementFromHtml } from 'common/element';
 
 import { Message } from './Message';
 import { ChatAnchor } from './ChatAnchor';
-import { EmoteFactory } from './Emotes';
+import { EmoteFactory } from 'common/Factories';
 import { SystemMessage } from './SystemMessage';
 
 const html = /*html*/ `

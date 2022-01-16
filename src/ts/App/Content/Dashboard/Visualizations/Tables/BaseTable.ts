@@ -59,18 +59,18 @@ export class BaseTable extends BaseVizualization {
     }
 
     updateTable(): void {
-        this.data.forEach((tableDataElement, rowInd) => {
-            Object.keys(tableDataElement).forEach((key, colInd) => {
-                const newData = String(tableDataElement[key]);
+        this.data.forEach((tableDataItem, rowInd) => {
+            Object.keys(tableDataItem).forEach((key, colInd) => {
+                const newData = String(tableDataItem[key]);
 
                 const tableCell = this.tableBody.querySelector(
                     `tr:nth-child(${rowInd + 1}) td:nth-child(${colInd + 1})`,
                 ) as HTMLTableCellElement;
 
-                const oldData = tableCell.innerText;
+                const oldData = tableCell.innerHTML;
 
                 if (newData !== oldData) {
-                    tableCell.innerText = newData;
+                    tableCell.innerHTML = newData;
                 }
             });
         });

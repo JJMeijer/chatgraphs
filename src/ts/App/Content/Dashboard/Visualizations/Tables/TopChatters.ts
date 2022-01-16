@@ -1,13 +1,17 @@
 import { CHANNEL_SUBMIT, CLOSE_APP, PRIVMSG } from 'common/constants';
 import { EventBus } from 'common/EventBus';
+import { BadgeFactory } from 'common/Factories';
 import { ChatterInfo, ChatterInfoDictionary } from 'common/types';
 import { BaseTable } from './BaseTable';
 
 export class TopChatters extends BaseTable {
     chatters: ChatterInfoDictionary = {};
+    badgeFactory: BadgeFactory;
 
     constructor(eventBus: EventBus) {
         super(eventBus, 'Top Chatters');
+
+        this.badgeFactory = new BadgeFactory(eventBus);
 
         this.setSubscribers();
     }
@@ -33,6 +37,12 @@ export class TopChatters extends BaseTable {
 
                 const existingChatter = this.chatters[chatter];
 
+                const processedBadges = badges
+                    .split(',')
+                    .filter((badgeId) => badgeId !== '')
+                    .map((badgeId) => this.badgeFactory.getBadge(badgeId))
+                    .join(' ');
+
                 if (existingChatter) {
                     existingChatter.count += 1;
                     return;
@@ -40,7 +50,7 @@ export class TopChatters extends BaseTable {
 
                 this.chatters[chatter] = {
                     count: 1,
-                    badges,
+                    badges: processedBadges,
                 };
             },
         });
