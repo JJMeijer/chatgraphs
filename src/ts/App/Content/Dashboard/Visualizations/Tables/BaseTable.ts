@@ -6,7 +6,7 @@ import { TableData } from 'common/types';
 
 const html = /*html*/ `
     <div class="w-full h-full justify-content">
-        <p class='table-title text-center font-bold text-sm'></p>
+        <p class='table-title text-center font-bold text-sm  pb-4'></p>
         <table class="w-full h-full">
             <thead>
             </thead>
@@ -38,8 +38,15 @@ export class BaseTable extends BaseVizualization {
 
     createTable(colNames: string[]): void {
         const headerHtml = /*html*/ `
-            <tr class="border-b-2 border-gray-700 text-left">
-                ${colNames.map((colName) => `<th>${colName}</th>`).join('')}
+            <tr class="h-[10%] bg-gray-600 rounded-t-md">
+                ${colNames
+                    .map((colName, ind) => {
+                        const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
+                        const colWidth = ind === 0 ? 'w-1/2' : '';
+
+                        return `<th class="${textDirection} ${colWidth} px-4 py-2">${colName}</th>`;
+                    })
+                    .join('')}
             </tr>
         `;
 
@@ -47,8 +54,14 @@ export class BaseTable extends BaseVizualization {
         this.tableHeader.appendChild(headerElement);
 
         const rowHtml = /*html*/ `
-            <tr class="text-left">
-                ${colNames.map(() => `<td></td>)`).join('')}
+            <tr class="text-left h-[9%]">
+                ${colNames
+                    .map((_, ind) => {
+                        const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
+
+                        return `<td class="${textDirection} px-4 py-1"></td>)`;
+                    })
+                    .join('')}
             </tr>
         `;
 

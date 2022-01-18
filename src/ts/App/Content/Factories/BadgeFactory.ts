@@ -80,7 +80,7 @@ export class BadgeFactory {
 
         if (badgeInfo) {
             const { title, url } = badgeInfo;
-            return `<img class="inline" src="${url}" alt="${title}" title="${title}" />`;
+            return `<img class="inline" src="${url}" alt="${title}" title="${title}">`;
         }
 
         throw new Error(`Unknown badgeId ${badgeId}`);

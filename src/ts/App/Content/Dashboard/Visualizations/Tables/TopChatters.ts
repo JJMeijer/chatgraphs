@@ -37,16 +37,16 @@ export class TopChatters extends BaseTable {
 
                 const existingChatter = this.chatters[chatter];
 
+                if (existingChatter) {
+                    existingChatter.count += 1;
+                    return;
+                }
+
                 const processedBadges = badges
                     .split(',')
                     .filter((badgeId) => badgeId !== '')
                     .map((badgeId) => this.badgeFactory.getBadge(badgeId))
                     .join(' ');
-
-                if (existingChatter) {
-                    existingChatter.count += 1;
-                    return;
-                }
 
                 this.chatters[chatter] = {
                     count: 1,

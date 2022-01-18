@@ -5,3 +5,4 @@ export { Moderation } from './Moderation';
 export { Subscribers } from './Subscribers';
 export { SubscribersPercentage } from './SubscribersPercentage';
 export { Viewers } from './Viewers';
+export { TopEmotesTrended } from './TopEmotesTrended';

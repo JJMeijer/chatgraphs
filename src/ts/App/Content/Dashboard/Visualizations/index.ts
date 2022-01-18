@@ -9,9 +9,10 @@ import {
     Subscribers,
     SubscribersPercentage,
     Viewers,
+    TopEmotesTrended,
 } from './Charts';
 import { Counters } from './Counters';
-import { TopChatters } from './Tables';
+import { TopChatters, TopEmotes } from './Tables';
 
 import { CHANNEL_SUBMIT, CHAT_VISIBILITY } from 'common/constants';
 import { HideChatButton } from './HideChatButton';
@@ -51,12 +52,14 @@ export class Visualizations {
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
     emotesPerMessage: EmotesPerMessage;
+    topEmotesTrended: TopEmotesTrended;
     subscribers: Subscribers;
     moderation: Moderation;
     counters: Counters;
     viewers: Viewers;
 
     topChatters: TopChatters;
+    topEmotes: TopEmotes;
 
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
@@ -67,12 +70,14 @@ export class Visualizations {
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
         this.emotesPerMessage = new EmotesPerMessage(this.eventBus);
+        this.topEmotesTrended = new TopEmotesTrended(this.eventBus);
         this.subscribers = new Subscribers(this.eventBus);
         this.moderation = new Moderation(this.eventBus);
         this.counters = new Counters(this.eventBus);
         this.viewers = new Viewers(this.eventBus);
 
         this.topChatters = new TopChatters(this.eventBus);
+        this.topEmotes = new TopEmotes(this.eventBus);
 
         this.hideChatButton = new HideChatButton(this.eventBus);
 
@@ -114,9 +119,11 @@ export class Visualizations {
             this.viewers.element,
             this.messagesPerMinute.element,
             this.emotesPerMessage.element,
+            this.topEmotesTrended.element,
             this.subscribers.element,
             this.moderation.element,
             this.topChatters.element,
+            this.topEmotes.element,
         );
 
         this.element.appendChild(this.hideChatButton.element);
