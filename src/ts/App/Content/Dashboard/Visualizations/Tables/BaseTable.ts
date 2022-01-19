@@ -7,12 +7,14 @@ import { TableData } from 'common/types';
 const html = /*html*/ `
     <div class="w-full h-full justify-content">
         <p class='table-title text-center font-bold text-sm  pb-4'></p>
-        <table class="w-full h-full">
-            <thead>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div class="overflow-auto h-[375px] scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
+            <table class="w-full h-full">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 `;
 
@@ -38,7 +40,7 @@ export class BaseTable extends BaseVizualization {
 
     createTable(colNames: string[]): void {
         const headerHtml = /*html*/ `
-            <tr class="h-[10%] bg-gray-600 rounded-t-md">
+            <tr class="h-10 bg-gray-600 rounded-t-md">
                 ${colNames
                     .map((colName, ind) => {
                         const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
@@ -54,7 +56,7 @@ export class BaseTable extends BaseVizualization {
         this.tableHeader.appendChild(headerElement);
 
         const rowHtml = /*html*/ `
-            <tr class="text-left h-[9%]">
+            <tr class="h-8 text-left">
                 ${colNames
                     .map((_, ind) => {
                         const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
