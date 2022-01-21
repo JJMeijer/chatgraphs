@@ -20,7 +20,7 @@ export class TopChatters extends BaseTable {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
-                this.createTable(['Chatter', 'Badges', 'Messages']);
+                this.initTable(['Chatter', 'Badges', 'Messages']);
                 this.setupLoop();
             },
         });
@@ -79,7 +79,7 @@ export class TopChatters extends BaseTable {
 
                     return 0;
                 })
-                .slice(0, 10);
+                .slice(0, 50);
 
             this.updateTable();
         }, 1000);

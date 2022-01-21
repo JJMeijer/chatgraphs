@@ -1,8 +1,0 @@
-{
-    "recommendations": [
-        "pushqrdx.inline-html",
-        "dbaeumer.vscode-eslint",
-        "ritwickdey.liveserver",
-        "bradlc.vscode-tailwindcss"
-    ]
-}

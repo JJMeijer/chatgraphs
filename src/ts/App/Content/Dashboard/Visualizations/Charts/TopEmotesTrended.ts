@@ -82,6 +82,7 @@ export class TopEmotesTrended extends BaseChart {
 
                 if (existingEmote) {
                     existingEmote.count += 1;
+                    return;
                 }
 
                 this.newEmotes[word] = {
@@ -119,6 +120,8 @@ export class TopEmotesTrended extends BaseChart {
                         y: newEmoteInfo.count,
                     });
 
+                    emoteInfo.sum += newEmoteInfo.count;
+
                     delete this.newEmotes[emote];
                 } else {
                     emoteInfo.data.push({
@@ -128,7 +131,17 @@ export class TopEmotesTrended extends BaseChart {
                 }
 
                 if (emoteInfo.data.length > 30) {
-                    emoteInfo.data.shift();
+                    const deletedItem = emoteInfo.data.shift() as ScatterDataPoint;
+
+                    if (deletedItem.y) {
+                        emoteInfo.sum -= deletedItem.y;
+                    }
+                }
+
+                const dataIsEmpty = emoteInfo.data.filter(({ y }) => y > 0).length === 0;
+
+                if (dataIsEmpty) {
+                    delete this.topEmotes[emote];
                 }
             });
 
@@ -152,6 +165,7 @@ export class TopEmotesTrended extends BaseChart {
                 this.topEmotes[newEmote] = {
                     url,
                     data,
+                    sum: count,
                 };
 
                 delete this.newEmotes[newEmote];

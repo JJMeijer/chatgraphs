@@ -10,7 +10,7 @@
         // "disableSolutionSearching": true,
         // "disableReferencedProjectLoad": true,
         "target": "es5",
-        "lib": ["ES2015", "DOM"],
+        "lib": ["ES2015", "ES2017.Object","DOM"],
         // "jsx": "preserve",
         // "experimentalDecorators": true,
         // "emitDecoratorMetadata": true,

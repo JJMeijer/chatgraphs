@@ -7,8 +7,8 @@ import { TableData } from 'common/types';
 const html = /*html*/ `
     <div class="w-full h-full justify-content">
         <p class='table-title text-center font-bold text-sm  pb-4'></p>
-        <div class="overflow-auto h-[375px] scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
-            <table class="w-full h-full">
+        <div class="overflow-auto h-[350px] scrollbar-thin scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
+            <table class="w-full">
                 <thead>
                 </thead>
                 <tbody>
@@ -38,9 +38,9 @@ export class BaseTable extends BaseVizualization {
         this.element.appendChild(this.tableWrapper);
     }
 
-    createTable(colNames: string[]): void {
+    initTable(colNames: string[]): void {
         const headerHtml = /*html*/ `
-            <tr class="h-10 bg-gray-600 rounded-t-md">
+            <tr class="sticky top-0 h-10 bg-gray-600 rounded-t-md">
                 ${colNames
                     .map((colName, ind) => {
                         const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
@@ -54,12 +54,14 @@ export class BaseTable extends BaseVizualization {
 
         const headerElement = createElementFromHtml<HTMLTableRowElement>(headerHtml);
         this.tableHeader.appendChild(headerElement);
+    }
 
+    createRow(data: string[]): void {
         const rowHtml = /*html*/ `
             <tr class="h-8 text-left">
-                ${colNames
+                ${data
                     .map((_, ind) => {
-                        const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
+                        const textDirection = ind !== data.length - 1 ? 'text-left' : 'text-right';
 
                         return `<td class="${textDirection} px-4 py-1"></td>)`;
                     })
@@ -67,14 +69,20 @@ export class BaseTable extends BaseVizualization {
             </tr>
         `;
 
-        for (let i = 0; i < 10; i++) {
-            const rowElement = createElementFromHtml<HTMLTableRowElement>(rowHtml);
-            this.tableBody.appendChild(rowElement);
-        }
+        const rowElement = createElementFromHtml<HTMLTableRowElement>(rowHtml);
+        this.tableBody.appendChild(rowElement);
     }
 
     updateTable(): void {
         this.data.forEach((tableDataItem, rowInd) => {
+            const rowCount = this.tableBody.childElementCount;
+
+            if (rowInd + 1 > rowCount) {
+                const data = Object.values(tableDataItem).map((x) => String(x));
+                this.createRow(data);
+                return;
+            }
+
             Object.keys(tableDataItem).forEach((key, colInd) => {
                 const newData = String(tableDataItem[key]);
 

@@ -346,6 +346,7 @@ export interface EmoteTrendedCounterDictionary {
 
 export interface EmoteTrendedInfo {
     data: ScatterDataPoint[];
+    sum: number;
     url: string;
 }
 

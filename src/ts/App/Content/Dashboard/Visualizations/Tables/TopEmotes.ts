@@ -16,7 +16,7 @@ export class TopEmotes extends BaseTable {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
-                this.createTable(['Emote', 'Service', 'Count']);
+                this.initTable(['Emote', 'Service', 'Count']);
                 this.setupLoop();
             },
         });
@@ -82,7 +82,7 @@ export class TopEmotes extends BaseTable {
 
                     return 0;
                 })
-                .slice(0, 10);
+                .slice(0, 50);
 
             this.updateTable();
         }, 1000);
