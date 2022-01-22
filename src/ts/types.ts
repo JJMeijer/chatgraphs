@@ -1,3 +1,4 @@
+import { TableChartEmotes } from './App/Content/Dashboard/Visualizations/Tables/TableChartEmotes';
 import {
     PRIVMSG,
     ROOMSTATE,
@@ -288,7 +289,7 @@ export interface EmoteCounter {
 }
 
 export interface TableData {
-    [key: string]: string | number;
+    [key: string]: string | number | HTMLElement;
 }
 
 export interface ChatterInfo {
@@ -322,4 +323,15 @@ export interface BadgeResponse {
     badge_sets: {
         [key: string]: BadgeReponseItem;
     };
+}
+
+export interface EmoteCounterInfo {
+    verboseType: 'Twitch' | 'FrankerFaceZ' | 'BetterTTV' | '7TV';
+    emoteElement: string;
+    count: number;
+    chart: TableChartEmotes;
+}
+
+export interface EmoteCounterDictionary {
+    [key: string]: EmoteCounterInfo;
 }

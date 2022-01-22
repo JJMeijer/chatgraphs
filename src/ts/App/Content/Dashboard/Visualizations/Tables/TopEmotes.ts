@@ -2,6 +2,7 @@ import { CHANNEL_SUBMIT, CLOSE_APP, EMOTE_USED } from 'common/constants';
 import { EventBus } from 'common/EventBus';
 import { EmoteCounterInfo, EmoteCounterDictionary } from 'common/types';
 import { BaseTable } from './BaseTable';
+import { TableChartEmotes } from './TableChartEmotes';
 
 export class TopEmotes extends BaseTable {
     emotes: EmoteCounterDictionary = {};
@@ -16,7 +17,7 @@ export class TopEmotes extends BaseTable {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: () => {
-                this.initTable(['Emote', 'Service', 'Count']);
+                this.initTable(['Emote', 'Service', 'Count', 'Trend']);
                 this.setupLoop();
             },
         });
@@ -54,6 +55,7 @@ export class TopEmotes extends BaseTable {
                     verboseType,
                     emoteElement,
                     count: 1,
+                    chart: new TableChartEmotes(this.eventBus, word),
                 };
             },
         });
@@ -63,12 +65,13 @@ export class TopEmotes extends BaseTable {
         const interval = setInterval(() => {
             this.data = Object.keys(this.emotes)
                 .map((emote) => {
-                    const { verboseType, emoteElement, count } = this.emotes[emote] as EmoteCounterInfo;
+                    const { verboseType, emoteElement, count, chart } = this.emotes[emote] as EmoteCounterInfo;
 
                     return {
                         Emote: emoteElement,
                         Type: verboseType,
                         Count: count,
+                        Trend: chart.element,
                     };
                 })
                 .sort((a, b) => {
