@@ -9,7 +9,7 @@ import {
     Subscribers,
     SubscribersPercentage,
     Viewers,
-    TopEmotesTrended,
+    ViewerParticipation,
 } from './Charts';
 import { Counters } from './Counters';
 import { TopChatters, TopEmotes } from './Tables';
@@ -52,7 +52,7 @@ export class Visualizations {
     messagesPerMinute: MessagesPerMinute;
     subscribersPercentage: SubscribersPercentage;
     emotesPerMessage: EmotesPerMessage;
-    topEmotesTrended: TopEmotesTrended;
+    viewerParticipation: ViewerParticipation;
     subscribers: Subscribers;
     moderation: Moderation;
     counters: Counters;
@@ -70,7 +70,7 @@ export class Visualizations {
         this.messagesPerMinute = new MessagesPerMinute(this.eventBus);
         this.subscribersPercentage = new SubscribersPercentage(this.eventBus);
         this.emotesPerMessage = new EmotesPerMessage(this.eventBus);
-        this.topEmotesTrended = new TopEmotesTrended(this.eventBus);
+        this.viewerParticipation = new ViewerParticipation(this.eventBus);
         this.subscribers = new Subscribers(this.eventBus);
         this.moderation = new Moderation(this.eventBus);
         this.counters = new Counters(this.eventBus);
@@ -115,11 +115,11 @@ export class Visualizations {
         this.charts.append(
             this.counters.element,
             this.messagesPerSecond.element,
+            this.messagesPerMinute.element,
             this.subscribersPercentage.element,
             this.viewers.element,
-            this.messagesPerMinute.element,
             this.emotesPerMessage.element,
-            this.topEmotesTrended.element,
+            this.viewerParticipation.element,
             this.subscribers.element,
             this.moderation.element,
             this.topChatters.element,

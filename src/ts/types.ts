@@ -1,4 +1,3 @@
-import { ScatterDataPoint } from 'chart.js';
 import {
     PRIVMSG,
     ROOMSTATE,
@@ -323,33 +322,4 @@ export interface BadgeResponse {
     badge_sets: {
         [key: string]: BadgeReponseItem;
     };
-}
-
-export interface EmoteCounterInfo {
-    verboseType: 'Twitch' | 'FrankerFaceZ' | 'BetterTTV' | '7TV';
-    emoteElement: string;
-    count: number;
-}
-
-export interface EmoteCounterDictionary {
-    [key: string]: EmoteCounterInfo;
-}
-
-export interface EmoteTrendedCounter {
-    count: number;
-    url: string;
-}
-
-export interface EmoteTrendedCounterDictionary {
-    [key: string]: EmoteTrendedCounter;
-}
-
-export interface EmoteTrendedInfo {
-    data: ScatterDataPoint[];
-    sum: number;
-    url: string;
-}
-
-export interface EmoteTrendedInfoDictionary {
-    [key: string]: EmoteTrendedInfo;
 }
