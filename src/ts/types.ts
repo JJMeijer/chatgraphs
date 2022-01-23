@@ -1,4 +1,3 @@
-import { TableChartEmotes } from './App/Content/Dashboard/Visualizations/Tables/TableChartEmotes';
 import {
     PRIVMSG,
     ROOMSTATE,
@@ -289,7 +288,7 @@ export interface EmoteCounter {
 }
 
 export interface TableData {
-    [key: string]: string | number | HTMLElement;
+    [key: string]: string | number;
 }
 
 export interface ChatterInfo {
@@ -329,9 +328,10 @@ export interface EmoteCounterInfo {
     verboseType: 'Twitch' | 'FrankerFaceZ' | 'BetterTTV' | '7TV';
     emoteElement: string;
     count: number;
-    chart: TableChartEmotes;
 }
 
 export interface EmoteCounterDictionary {
     [key: string]: EmoteCounterInfo;
 }
+
+export type WordCloudData = [string, number];

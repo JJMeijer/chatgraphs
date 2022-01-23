@@ -44,7 +44,7 @@ export class BaseTable extends BaseVizualization {
                 ${colNames
                     .map((colName, ind) => {
                         const textDirection = ind !== colNames.length - 1 ? 'text-left' : 'text-right';
-                        const colWidth = ind === 0 ? 'w-1/3' : '';
+                        const colWidth = ind === 0 ? 'w-1/2' : '';
 
                         return `<th class="${textDirection} ${colWidth} px-4 py-2">${colName}</th>`;
                     })
@@ -56,7 +56,7 @@ export class BaseTable extends BaseVizualization {
         this.tableHeader.appendChild(headerElement);
     }
 
-    createRow(data: (string | HTMLElement)[]): void {
+    createRow(data: string[]): void {
         const rowHtml = /*html*/ `
             <tr class="h-8 text-left"></tr>
         `;
@@ -64,20 +64,13 @@ export class BaseTable extends BaseVizualization {
         const rowElement = createElementFromHtml<HTMLTableRowElement>(rowHtml);
 
         data.forEach((item, ind) => {
-            if (typeof item === 'string') {
-                const textDirection = ind !== data.length - 1 ? 'text-left' : 'text-right';
-                const cellElement = createElementFromHtml<HTMLTableCellElement>(
-                    `<td class="${textDirection} px-4 py-1">${item}</td>`,
-                );
-                rowElement.appendChild(cellElement);
-                return;
-            }
-
-            const tableCellParent = createElementFromHtml<HTMLTableCellElement>('<td></td>');
-            tableCellParent.appendChild(item);
-
-            rowElement.appendChild(tableCellParent);
+            const textDirection = ind !== data.length - 1 ? 'text-left' : 'text-right';
+            const cellElement = createElementFromHtml<HTMLTableCellElement>(
+                `<td class="${textDirection} px-4 py-1">${item}</td>`,
+            );
+            rowElement.appendChild(cellElement);
         });
+
         this.tableBody.appendChild(rowElement);
     }
 
@@ -98,39 +91,16 @@ export class BaseTable extends BaseVizualization {
             }
 
             Object.keys(tableDataItem).forEach((key, colInd) => {
-                const newData = tableDataItem[key];
+                const newData = String(tableDataItem[key]);
 
                 const tableCell = this.tableBody.querySelector(
                     `tr:nth-child(${rowInd + 1}) td:nth-child(${colInd + 1})`,
                 ) as HTMLTableCellElement;
 
-                if (typeof newData === 'string' || typeof newData === 'number') {
-                    const newDataString = String(newData);
+                const oldData = tableCell.innerHTML;
 
-                    const oldDataString = tableCell.innerHTML;
-
-                    if (newDataString !== oldDataString) {
-                        tableCell.innerHTML = newDataString;
-                    }
-
-                    return;
-                }
-
-                if (!newData) {
-                    return;
-                }
-
-                const oldElement = tableCell.children[0];
-
-                if (!oldElement) {
-                    tableCell.appendChild(newData);
-                    return;
-                }
-
-                if (oldElement !== newData) {
-                    tableCell.removeChild(oldElement);
-                    tableCell.appendChild(newData);
-                    return;
+                if (newData !== oldData) {
+                    tableCell.innerHTML = newData;
                 }
             });
         });
