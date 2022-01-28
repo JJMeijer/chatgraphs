@@ -6,4 +6,3 @@ export { Subscribers } from './Subscribers';
 export { SubscribersPercentage } from './SubscribersPercentage';
 export { Viewers } from './Viewers';
 export { ViewerParticipation } from './ViewerParticipation';
-export { Vibe } from './Vibe';

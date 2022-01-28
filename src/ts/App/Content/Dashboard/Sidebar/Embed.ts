@@ -33,7 +33,7 @@ export class Embed {
         this.eventBus.subscribe({
             eventName: CHANNEL_SUBMIT,
             eventCallback: ({ channel }) => {
-                this.iframe.src = `https://player.twitch.tv/?channel=${channel}&parent=localhost`;
+                this.iframe.src = `https://player.twitch.tv/?channel=${channel}&parent=localhost&parent=chatgraphs.com`;
             },
         });
     }

@@ -10,7 +10,6 @@ import {
     SubscribersPercentage,
     Viewers,
     ViewerParticipation,
-    Vibe,
 } from './Charts';
 import { Counters } from './Counters';
 import { TopChatters, TopEmotes } from './Tables';
@@ -62,8 +61,6 @@ export class Visualizations {
     topChatters: TopChatters;
     topEmotes: TopEmotes;
 
-    vibe: Vibe;
-
     constructor(eventBus: EventBus) {
         this.eventBus = eventBus;
         this.element = createElementFromHtml<HTMLDivElement>(html);
@@ -81,8 +78,6 @@ export class Visualizations {
 
         this.topChatters = new TopChatters(this.eventBus);
         this.topEmotes = new TopEmotes(this.eventBus);
-
-        this.vibe = new Vibe(this.eventBus);
 
         this.hideChatButton = new HideChatButton(this.eventBus);
 
@@ -129,7 +124,6 @@ export class Visualizations {
             this.moderation.element,
             this.topChatters.element,
             this.topEmotes.element,
-            this.vibe.element,
         );
 
         this.element.appendChild(this.hideChatButton.element);

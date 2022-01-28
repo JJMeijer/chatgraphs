@@ -1,3 +1,5 @@
+const minifyTemplates = require('esbuild-minify-templates');
+
 const [command] = process.argv.slice(2);
 
 const PROD = command === 'build';
@@ -13,4 +15,6 @@ require('esbuild').build({
     sourcemap: !PROD,
     watch: WATCH,
     color: true,
+    plugins: [minifyTemplates.minifyTemplates(), minifyTemplates.writeFiles()],
+    write: !PROD,
 });
