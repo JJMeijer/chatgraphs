@@ -44,7 +44,7 @@ export class IrcClient {
     }
 
     onMessage(event: MessageEvent<string>): void {
-        const messages = event.data.trim().split(/\r\n/);
+        const messages = event.data.trim().split('\r\n');
 
         messages.forEach((message: string) => {
             if (message.indexOf('PING') === 0) {
