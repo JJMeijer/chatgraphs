@@ -74,6 +74,8 @@ export class ChannelSelect {
                     channel,
                 },
             });
+
+            fetch(`/static/img/ana.gif?e=ch&c=${channel}`);
         };
 
         const submitButton = this.element.querySelector('.submit-button') as HTMLSpanElement;
