@@ -3,6 +3,13 @@ runtime: python39
 instance_class: F1
 
 handlers:
+# favicon
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+  expiration: "0"
+  secure: always
+
 # Static Files
 - url: /static
   secure: always
