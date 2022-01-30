@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="max-h-screen">
     <head>
         <title>Chat Graphs</title>
         <meta charset="UTF-8" />
@@ -8,8 +8,8 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32x32.png">
         <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="static/css/main-dist.css?v=1" />
-        <script src="static/js/main.js?v=1"></script>
+        <link rel="stylesheet" href="static/css/main-dist.css?v=2" />
+        <script src="static/js/main.js?v=2"></script>
         <style>
             .chat-messages::-webkit-scrollbar {
                 display: none;
@@ -23,7 +23,7 @@
     </head>
 
     <body class="bg-gray-800 text-gray-400 h-full w-full">
-        <div class="flex flex-col h-screen">
+        <div class="flex flex-col">
             <div id="tabs" class="flex flex-row items-center min-w-full border-b border-gray-700 h-10">
                 <div
                     id="add-tab"
@@ -44,6 +44,5 @@
             </div>
             <div id="content" class="grow"></div>
         </div>
-        <img src="/static/img/ana.gif?e=pv">
     </body>
 </html>

@@ -1,3 +1,4 @@
+import { sendAnalyticsHit } from 'common/analytics';
 import { createElementFromHtml } from 'common/element';
 import { CHANNEL_SUBMIT, CLOSE_APP, TAB_CLICK } from '../constants';
 import { EventBus } from './EventBus';
@@ -58,6 +59,8 @@ export class Tab {
             this.eventBus.publish({
                 eventName: CLOSE_APP,
             });
+
+            sendAnalyticsHit({ e: 'tabClose' });
         });
 
         const radioElement = this.element.querySelector('input[type="radio"]') as HTMLInputElement;

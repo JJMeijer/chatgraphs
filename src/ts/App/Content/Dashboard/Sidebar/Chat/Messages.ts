@@ -9,7 +9,7 @@ import { EmoteFactory } from 'common/Factories';
 import { SystemMessage } from './SystemMessage';
 
 const html = /*html*/ `
-    <div class="chat-messages flex flex-col-reverse h-full w-full overflow-y-auto py-1 no-overflow-anchor"></div>
+    <div class="chat-messages flex flex-col-reverse h-full w-full overflow-y-auto py-1 no-overflow-anchor sm:overflow-anchor-auto"></div>
 `;
 
 export class Messages {

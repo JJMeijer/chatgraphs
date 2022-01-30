@@ -6,4 +6,8 @@
     .no-overflow-anchor {
         overflow-anchor: none;
     }
+
+    .overflow-anchor-auto {
+        overflow-anchor: auto;
+    }
 }

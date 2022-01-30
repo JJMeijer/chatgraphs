@@ -335,3 +335,7 @@ export interface EmoteCounterDictionary {
 }
 
 export type WordCloudData = [string, number];
+
+export interface AnalyticsContent {
+    [key: string]: string | number;
+}

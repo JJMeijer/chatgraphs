@@ -1,3 +1,4 @@
+import { sendAnalyticsHit } from 'common/analytics';
 import { createElementFromHtml } from 'common/element';
 import { CHANNEL_SUBMIT } from '../../constants';
 import { EventBus } from '../EventBus';
@@ -16,7 +17,8 @@ const html = /*html*/ `
             duration-1000
         "
     >
-        <div class="mb-[5%] border-b border-gray-700">
+        <p class="text-2xl py-20 caret-transparent">Graphs about Twitch chat. Enter a channel name</p>
+        <div class="mb-[15%] border-b border-gray-700">
             <input
                 type="text"
                 autocomplete="off"
@@ -75,7 +77,7 @@ export class ChannelSelect {
                 },
             });
 
-            fetch(`/static/img/ana.gif?e=ch&c=${channel}`);
+            sendAnalyticsHit({ e: 'channelSubmit', ch: channel });
         };
 
         const submitButton = this.element.querySelector('.submit-button') as HTMLSpanElement;
