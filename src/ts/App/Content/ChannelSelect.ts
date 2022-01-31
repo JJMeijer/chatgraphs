@@ -6,6 +6,7 @@ import { EventBus } from '../EventBus';
 const html = /*html*/ `
     <div
         class="
+            top-[20vh]
             absolute
             h-full
             w-full
@@ -17,8 +18,8 @@ const html = /*html*/ `
             duration-1000
         "
     >
-        <p class="text-2xl py-20 caret-transparent">Graphs about Twitch chat. Enter a channel name</p>
-        <div class="mb-[15%] border-b border-gray-700">
+        <p class="text-2xl py-20 caret-transparent text-center">Graphs about Twitch chat. Enter a channel name</p>
+        <div class="border-b border-gray-700">
             <input
                 type="text"
                 autocomplete="off"

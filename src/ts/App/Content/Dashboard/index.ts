@@ -3,9 +3,10 @@ import { createElementFromHtml } from 'common/element';
 
 import { Visualizations } from './Visualizations';
 import { Sidebar } from './Sidebar';
+import { CHANNEL_SUBMIT } from 'common/constants';
 
 const html = /*html*/ `
-    <div class="flex flex-col md:flex-row h-full w-full bg-gray-800"></div>
+    <div class="hidden flex-col md:flex-row h-full w-full bg-gray-800"></div>
 `;
 
 export class Dashboard {
@@ -23,6 +24,18 @@ export class Dashboard {
         this.visualizations = new Visualizations(this.eventBus);
 
         this.render();
+        this.setSubscribers();
+    }
+
+    show() {
+        this.element.classList.replace('hidden', 'flex');
+    }
+
+    setSubscribers(): void {
+        this.eventBus.subscribe({
+            eventName: CHANNEL_SUBMIT,
+            eventCallback: () => this.show(),
+        });
     }
 
     render(): void {
