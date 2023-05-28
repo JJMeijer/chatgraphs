@@ -13,10 +13,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
       - name: Install & Build
         run: |
-          npm ci
-          npm run build
+          pnpm install
+          pnpm build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
