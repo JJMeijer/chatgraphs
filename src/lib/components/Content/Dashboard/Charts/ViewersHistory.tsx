@@ -9,6 +9,11 @@ interface ViewersHistoryProps {
 }
 
 const options: ChartOptions<"line"> = {
+    elements: {
+        line: {
+            spanGaps: true,
+        },
+    },
     scales: {
         x: {
             type: "time",

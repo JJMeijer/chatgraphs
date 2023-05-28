@@ -7,12 +7,12 @@ import { ChartWrapper } from "./ChartWrapper";
 const options: ChartOptions<"bar"> = {
     scales: {
         x: {
-            type: "timeseries",
+            type: "time",
             time: {
                 unit: "minute",
                 tooltipFormat: "HH:mm",
                 displayFormats: {
-                    second: "HH:mm",
+                    minute: "HH:mm",
                 },
             },
         },

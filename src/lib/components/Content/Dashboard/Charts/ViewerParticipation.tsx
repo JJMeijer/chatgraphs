@@ -18,8 +18,9 @@ const options: ChartOptions<"line"> = {
         },
         y: {
             min: 0,
+            suggestedMax: 0.01,
             ticks: {
-                stepSize: 0.02,
+                stepSize: 0.002,
                 callback: (value: string | number) => {
                     const numValue = typeof value === "string" ? parseInt(value) : value;
                     return (numValue * 100).toFixed(1) + "%";

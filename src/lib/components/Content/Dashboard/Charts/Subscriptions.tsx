@@ -7,12 +7,12 @@ import { ChartOptions } from "chart.js";
 const options: ChartOptions<"bar"> = {
     scales: {
         x: {
-            type: "timeseries",
+            type: "time",
             time: {
                 unit: "minute",
                 tooltipFormat: "HH:mm",
                 displayFormats: {
-                    second: "HH:mm",
+                    minute: "HH:mm",
                 },
             },
         },
@@ -40,17 +40,13 @@ const options: ChartOptions<"bar"> = {
             position: "bottom",
         },
     },
-    // layout: {
-    //     padding: {
-    //         top: 20,
-    //     },
-    // },
 };
 
 export const Subscriptions = (props: ChartProps): JSX.Element => {
     const { useDataStore } = props;
 
     const subscriptions = useDataStore((state) => state.subscriptions);
+    const primeSubscriptions = useDataStore((state) => state.primeSubscriptions);
     const giftedSubscriptions = useDataStore((state) => state.giftedSubscriptions);
 
     const data = {
@@ -60,6 +56,11 @@ export const Subscriptions = (props: ChartProps): JSX.Element => {
                 label: "Subscriptions",
                 data: subscriptions.map((s) => s.y),
                 backgroundColor: "rgba(153, 102, 255, 0.8)",
+            },
+            {
+                label: "Prime Subscriptions",
+                data: primeSubscriptions.map((s) => s.y),
+                backgroundColor: "rgba(255, 99, 132, 0.8)",
             },
             {
                 label: "Gifted Subscriptions",
