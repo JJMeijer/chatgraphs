@@ -9,7 +9,7 @@ export const Embed = (props: CommonDashboardProps): JSX.Element => {
     useEffect(() => {
         if (channel) {
             setSrc(
-                `https://player.twitch.tv/?channel=${channel}&parent=localhost&parent=127.0.0.1&parent=chatgraphs.com&parent=www.chatgraphs.com`,
+                `https://player.twitch.tv/?channel=${channel}&parent=localhost&parent=127.0.0.1&parent=jjmeijer.github.io`,
             );
         } else {
             setSrc("");
