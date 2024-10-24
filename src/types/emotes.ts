@@ -32,9 +32,21 @@ export interface BttvResponse {
     sharedEmotes: BttvEmoteInfo[];
 }
 
-export interface SevenTvEmoteInfo {
+export interface SevenTvEmote {
     id: string;
     name: string;
+}
+
+export interface SevenTvEmoteSet {
+    id: string;
+    name: string;
+    emotes: SevenTvEmote[];
+}
+
+export interface SevenTvChannel {
+    username: string;
+    display_name: string;
+    emote_set: SevenTvEmoteSet;
 }
 
 export interface FrankerFacezResponse {

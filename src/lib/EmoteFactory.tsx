@@ -1,5 +1,5 @@
 import { EMOTE_USED, ROOMSTATE } from "@constants";
-import { BttvEmoteInfo, BttvResponse, FrankerFacezResponse, SevenTvEmoteInfo } from "@types";
+import { BttvEmoteInfo, BttvResponse, FrankerFacezResponse, SevenTvEmoteSet, SevenTvChannel } from "@types";
 import { EventBus } from "./EventBus";
 
 export class EmoteFactory {
@@ -80,7 +80,8 @@ export class EmoteFactory {
                         url,
                     });
 
-                    chars.splice(start, end + 1, `<img class="inline" src="${url}" alt="${word}" title="${word}" />`);
+                    const label = `${word} (twitch)`;
+                    chars.splice(start, end + 1, `<img class="inline" src="${url}" alt="${label}" title="${label}" />`);
                 });
             });
 
@@ -102,7 +103,8 @@ export class EmoteFactory {
                     url,
                 });
 
-                return `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
+                const label = `${word} (bttv)`;
+                return `<img class="inline" src="${url}" alt="${label}" title="${label}" />`;
             }
 
             if (ffId) {
@@ -114,7 +116,8 @@ export class EmoteFactory {
                     url,
                 });
 
-                return `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
+                const label = `${word} (ffz)`;
+                return `<img class="inline" src="${url}" alt="${label}" title="${label}" />`;
             }
 
             if (sevenTvId) {
@@ -126,7 +129,8 @@ export class EmoteFactory {
                     url,
                 });
 
-                return `<img class="inline" src="${url}" alt="${word}" title="${word}" />`;
+                const label = `${word} (7tv)`;
+                return `<img class="inline" src="${url}" alt="${label}" title="${label}" />`;
             }
 
             /**
@@ -202,29 +206,29 @@ export class EmoteFactory {
     }
 
     async setGlobalSevenTvEmotes(): Promise<void> {
-        const resp = await fetch("https://api.7tv.app/v2/emotes/global");
+        const resp = await fetch("https://7tv.io/v3/emote-sets/global");
 
         if (!resp.ok) {
             console.warn("Failed to get global 7tv emotes");
             return;
         }
 
-        const data = (await resp.json()) as SevenTvEmoteInfo[];
-        data.forEach((emote) => {
+        const data = (await resp.json()) as SevenTvEmoteSet;
+        data.emotes.forEach((emote) => {
             this.sevenTvEmotes[emote.name] = emote.id;
         });
     }
 
     async setChannelSevenTvEmotes(channelId: string): Promise<void> {
-        const resp = await fetch(`https://api.7tv.app/v2/users/${channelId}/emotes`);
+        const resp = await fetch(`https://7tv.io/v3/users/twitch/${channelId}`);
 
         if (!resp.ok) {
             console.warn("Failed to get channel 7tv emotes");
             return;
         }
 
-        const data = (await resp.json()) as SevenTvEmoteInfo[];
-        data.forEach((emote) => {
+        const data = (await resp.json()) as SevenTvChannel;
+        data.emote_set.emotes.forEach((emote) => {
             this.sevenTvEmotes[emote.name] = emote.id;
         });
     }
