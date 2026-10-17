@@ -1,17 +1,17 @@
-export interface BadgeResponse {
-    badge_sets: {
-        [key: string]: {
-            versions: {
-                [key: string]: {
-                    title: string;
-                    image_url_1x: string;
-                    image_url_2x: string;
-                    image_url_4x: string;
-                };
-            };
-        };
-    };
+export interface BadgeVersion {
+    id: string;
+    title: string;
+    image_url_1x: string;
+    image_url_2x: string;
+    image_url_4x: string;
 }
+
+export interface BadgeSet {
+    set_id: string;
+    versions: BadgeVersion[];
+}
+
+export type BadgeResponse = BadgeSet[];
 
 export interface BadgeData {
     title: string;
